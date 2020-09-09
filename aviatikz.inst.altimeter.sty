@@ -1,0 +1,300 @@
+%
+% Höhenmesser
+%
+
+\pgfmathsetmacro{\avia@inst@altimeter@tickout}{\avia@inst@face@rad - 0.2}		% Außenradius Skalenstrich
+\pgfmathsetmacro{\avia@inst@altimeter@majortickin}{\avia@inst@altimeter@tickout - 0.4}	% Innenradius Skalenstrich
+\pgfmathsetmacro{\avia@inst@altimeter@minortickin}{\avia@inst@altimeter@tickout - 0.3}	% Innenradius Teilstrich
+\pgfmathsetmacro{\avia@inst@altimeter@colsman@inrad}{1.9}				% Innenradius Colsman-Fenster
+\pgfmathsetmacro{\avia@inst@altimeter@colsman@outrad}{2.9}				% Außenradius Colsman-Fenster
+\pgfmathsetmacro{\avia@inst@altimeter@colsman@majortickin}{2.6}				% Innenradius Skalenstrich
+\pgfmathsetmacro{\avia@inst@altimeter@colsman@minortickin}{2.7}				% Innenradius Teilstrich
+\pgfmathsetmacro{\avia@inst@altimeter@tenthousand@inrad}{0.9}				% Innenradius 10000er-Scheibe
+\pgfmathsetmacro{\avia@inst@altimeter@tenthousand@outrad}{1.9}				% Außenradius 10000er-Scheibe
+
+
+% Ziffernblatt 20er-Schritte
+\newcommand{\aviainst@altimeter@face@twenty}
+{
+  \begingroup
+
+  % Ziffernblatt
+  \path [/avia/inst/altimeter/face/background] (0, 0) circle (\avia@inst@hole@rad);
+
+  % Skalenstriche
+  \foreach \i in {0,1,...,49}
+  {
+    \pgfmathtruncatemacro{\modulo}{mod(\i, 5)}
+    \pgfmathsetmacro{\angle}{90 - \i / 50 * 360}
+    \ifnum\modulo=0
+      % 100-er
+      \path [/avia/inst/altimeter/face/majortick]
+        (\angle:\avia@inst@altimeter@majortickin) -- (\angle:\avia@inst@altimeter@tickout);
+    \else
+      % 20-er
+      \path [/avia/inst/altimeter/face/minortick]
+        (\angle:\avia@inst@altimeter@minortickin) -- (\angle:\avia@inst@altimeter@tickout);
+    \fi
+  }
+
+  % Beschriftung
+  \foreach \i in {0,1,...,9}
+  {
+    \pgfmathsetmacro{\angle}{90 - \i / 10 * 360}
+    \ifnum\i=2
+      \node [/avia/inst/altimeter/face/number] at ($(\angle:2.4) + (0.0, -0.2)$) [above] {\i};
+    \else\ifnum\i=3
+      \node [/avia/inst/altimeter/face/number] at ($(\angle:2.4) + (0.0,  0.2)$) [below] {\i};
+    \else
+      \node [/avia/inst/altimeter/face/number] at (\angle:2.4) {\i};
+    \fi\fi
+  }
+
+  % Schraffierung
+  \path [pattern={north west lines},/avia/inst/altimeter/face/hatch]
+    (240:\avia@inst@altimeter@tenthousand@outrad)
+    arc [start angle=240,end angle=300,radius=\avia@inst@altimeter@tenthousand@outrad] --
+    (300:\avia@inst@altimeter@tenthousand@inrad) 
+    arc [start angle=300,end angle=240,radius=\avia@inst@altimeter@tenthousand@inrad]  --
+    cycle;
+
+  % Weitere Textelemente
+  % TODO: Extra Style
+  \node [/avia/inst/altimeter/face/number] at (108:\avia@inst@altimeter@majortickin) [font={\fontsize{8}{8}\selectfont},below,rotate= 18] {100};
+  \node [/avia/inst/altimeter/face/number] at ( 72:\avia@inst@altimeter@majortickin) [font={\fontsize{8}{8}\selectfont},below,rotate=-18] {FEET};
+
+  \endgroup
+}
+
+\let\aviainst@altimeter@face\aviainst@altimeter@face@twenty
+
+\pgfkeys{/avia/inst/altimeter/face/background/.style={fill=black!80}}
+\pgfkeys{/avia/inst/altimeter/face/majortick/.style={draw=white,line width=3.0pt}}
+\pgfkeys{/avia/inst/altimeter/face/minortick/.style={draw=white,line width=1.5pt}}
+\pgfkeys{/avia/inst/altimeter/face/number/.style={text=white,font={\fontsize{24}{24}\selectfont}}}
+\pgfkeys{/avia/inst/altimeter/face/hatch/.style={pattern=north west lines,pattern color=white}}
+\pgfkeys{/avia/inst/altimeter/face/type/.is choice}
+\pgfkeys{/avia/inst/altimeter/face/type/.value required}
+\pgfkeys{/avia/inst/altimeter/face/type/twenty/.code={\let\aviainst@altimeter@face\aviainst@altimeter@face@twenty}}
+\pgfkeys{/avia/inst/altimeter/face/type=twenty}
+
+
+% Colsman-Fenster
+\newcommand{\aviainst@altimeter@colsman}
+{
+  \begingroup
+  \pgfkeysgetvalue{/avia/inst/altimeter/qnh}{\qnh}
+  \pgfmathtruncatemacro{\qnhlower}{floor(\qnh - 5)}
+  \pgfmathtruncatemacro{\qnhupper}{ceil(\qnh + 5)}
+
+  % Referenzmarke
+  \path [/avia/inst/altimeter/colsman/refmark]
+    (\avia@inst@altimeter@colsman@outrad,  0.03) --
+    ($(\avia@inst@altimeter@colsman@outrad, 0.0) + (0.16,  0.03)$) --
+    ($(\avia@inst@altimeter@colsman@outrad, 0.0) + (0.20,  0.07)$) --
+    ($(\avia@inst@altimeter@tickout, 0.0) + (0.05,  0.07)$) --
+    ($(\avia@inst@altimeter@tickout, 0.0) + (0.05, -0.07)$) --
+    ($(\avia@inst@altimeter@colsman@outrad, 0.0) + (0.20, -0.07)$) --
+    ($(\avia@inst@altimeter@colsman@outrad, 0.0) + (0.16, -0.03)$) --
+    (\avia@inst@altimeter@colsman@outrad, -0.03) --
+    cycle;
+
+  % Fenster
+  \path [/avia/inst/altimeter/colsman/border]
+    ( 12:\avia@inst@altimeter@colsman@inrad)  --
+    ( 12:\avia@inst@altimeter@colsman@outrad) arc [start angle=12,end angle=-12,radius=\avia@inst@altimeter@colsman@outrad] --
+    (-12:\avia@inst@altimeter@colsman@inrad)  arc [start angle=-12,end angle=12,radius=\avia@inst@altimeter@colsman@inrad]  --
+    cycle;
+
+  \path [/avia/inst/altimeter/colsman/background]
+    ( 12:\avia@inst@altimeter@colsman@inrad)  --
+    ( 12:\avia@inst@altimeter@colsman@outrad) arc [start angle=12,end angle=-12,radius=\avia@inst@altimeter@colsman@outrad] --
+    (-12:\avia@inst@altimeter@colsman@inrad)  arc [start angle=-12,end angle=12,radius=\avia@inst@altimeter@colsman@inrad]  --
+    cycle;
+
+  % Skala
+  \begin{scope}
+  \clip
+    ( 12:\avia@inst@altimeter@colsman@inrad)  --
+    ( 12:\avia@inst@altimeter@colsman@outrad) arc [start angle=12,end angle=-12,radius=\avia@inst@altimeter@colsman@outrad] --
+    (-12:\avia@inst@altimeter@colsman@inrad)  arc [start angle=-12,end angle=12,radius=\avia@inst@altimeter@colsman@inrad]  --
+    cycle;
+
+  \foreach \i in {\qnhlower,...,\qnhupper}
+  {
+    \pgfmathtruncatemacro{\modulo}{mod(\i, 5)}
+    \pgfmathsetmacro{\angle}{-(ifthenelse(\i == 1013, 1013.25, \i) - \qnh) / 8 * 24}
+
+    \ifnum\i=1013
+      % Standard-QNH: 1013.25
+      \draw [/avia/inst/altimeter/colsman/standardtick]
+        (\angle:\avia@inst@altimeter@colsman@outrad) --
+        (\angle:\avia@inst@altimeter@colsman@majortickin);
+    \else
+      \ifnum\modulo=0
+        \draw [/avia/inst/altimeter/colsman/majortick]
+          (\angle:\avia@inst@altimeter@colsman@outrad) --
+          (\angle:\avia@inst@altimeter@colsman@majortickin);
+        \node [/avia/inst/altimeter/colsman/number]
+          at (\angle:2.6) [left,rotate=\angle] {\i};
+      \else
+        \draw [/avia/inst/altimeter/colsman/minortick]
+          (\angle:\avia@inst@altimeter@colsman@outrad) --
+          (\angle:\avia@inst@altimeter@colsman@minortickin);
+      \fi
+    \fi
+  }
+  \end{scope}
+  \endgroup
+}
+
+\pgfkeys{/avia/inst/altimeter/colsman/background/.style=/avia/inst/altimeter/face/background}
+\pgfkeys{/avia/inst/altimeter/colsman/border/.style=/avia/inst/needle/border}
+\pgfkeys{/avia/inst/altimeter/colsman/refmark/.style={fill=white}}
+\pgfkeys{/avia/inst/altimeter/colsman/majortick/.style={draw=white,line width=2.0pt}}
+\pgfkeys{/avia/inst/altimeter/colsman/minortick/.style={draw=white,line width=1.0pt}}
+\pgfkeys{/avia/inst/altimeter/colsman/standardtick/.style={/avia/inst/altimeter/colsman/majortick}}
+\pgfkeys{/avia/inst/altimeter/colsman/number/.style={text=white,font={\fontsize{8}{8}\selectfont}}}
+
+
+% Zehtausender-Zeiger
+\newcommand{\aviainst@altimeter@needle@tenthousand}
+{
+  \path [/avia/inst/altimeter/needle/tenthousand/border]
+    (240:\avia@inst@altimeter@tenthousand@outrad)
+    arc [start angle=240,delta angle=-300,radius=\avia@inst@altimeter@tenthousand@outrad] --
+    (300:\avia@inst@altimeter@tenthousand@inrad)
+    arc [start angle=300,delta angle= -60,radius=\avia@inst@altimeter@tenthousand@inrad]  --
+    cycle;
+
+  \path [/avia/inst/altimeter/needle/tenthousand/border]
+    ( 0.10, 0.00) -- ( 0.10, 2.90) -- ( 0.30, 3.35) --
+    (-0.30, 3.35) -- (-0.10, 2.90) -- (-0.10, 0.00) --
+    cycle;
+
+  \path [/avia/inst/altimeter/needle/tenthousand/secondary]
+    (240:\avia@inst@altimeter@tenthousand@outrad)
+    arc [start angle=240,delta angle=-300,radius=\avia@inst@altimeter@tenthousand@outrad] --
+    (300:\avia@inst@altimeter@tenthousand@inrad)
+    arc [start angle=300,delta angle= -60,radius=\avia@inst@altimeter@tenthousand@inrad]  --
+    cycle;
+
+  \path [/avia/inst/altimeter/needle/tenthousand/secondary]
+    ( 0.10, 0.00) -- ( 0.10, 2.90) -- ( 0.30, 3.35) --
+    (-0.30, 3.35) -- (-0.10, 2.90) -- (-0.10, 0.00) --
+    cycle;
+
+  \path [/avia/inst/altimeter/needle/tenthousand/primary]
+    ( 0.09, 0.00) -- ( 0.09, 1.32) -- ( 0.03, 1.40) --
+    ( 0.03, 2.98) -- ( 0.30, 3.35) -- (-0.30, 3.35) -- (-0.03, 2.98) --
+    (-0.03, 1.40) -- (-0.09, 1.32) -- (-0.09, 0.00) --
+    cycle;
+
+  % Schriftzug
+  \node [/avia/inst/altimeter/needle/tenthousand/label]
+    at (-0.4, 0.0) [above left] {ALT};
+}
+
+\pgfkeys{/avia/inst/altimeter/needle/tenthousand/primary/.style=/avia/inst/needle/primary}
+\pgfkeys{/avia/inst/altimeter/needle/tenthousand/secondary/.style=/avia/inst/altimeter/face/background}
+\pgfkeys{/avia/inst/altimeter/needle/tenthousand/border/.style=/avia/inst/needle/border}
+\pgfkeys{/avia/inst/altimeter/needle/tenthousand/label/.style={/avia/inst/altimeter/face/number,font={\fontsize{18}{18}\selectfont}}}
+
+
+% Tausender-Zeiger
+\newcommand{\aviainst@altimeter@needle@thousand}
+{
+  \path [/avia/inst/altimeter/needle/thousand/border]
+    (0.1, 0.3) -- (80:1.2) -- (90:1.7) -- (100:1.2) -- (-0.1, 0.3) -- (-0.1, -0.1)
+    {[rounded corners = 5pt] -- (240:0.75) arc [start angle=240,end angle=300,radius=0.75]} --
+    (0.1, -0.1) --
+    cycle;
+
+  \path [/avia/inst/altimeter/needle/thousand/secondary]
+    (-0.1, 0.3) -- (-0.1, -0.1)
+    {[rounded corners = 5pt] -- (240:0.75) arc [start angle=240,end angle=300,radius=0.75]} --
+    (0.1, -0.1) -- (0.1, 0.3) -- 
+    cycle;
+
+  \path [/avia/inst/altimeter/needle/thousand/primary]
+    (0.1, 0.3) -- (80:1.2) -- (90:1.7) -- (100:1.2) -- (-0.1, 0.3) --
+    cycle;
+}
+
+\pgfkeys{/avia/inst/altimeter/needle/thousand/primary/.style=/avia/inst/needle/primary}
+\pgfkeys{/avia/inst/altimeter/needle/thousand/secondary/.style=/avia/inst/needle/secondary}
+\pgfkeys{/avia/inst/altimeter/needle/thousand/border/.style=/avia/inst/needle/border}
+
+
+% Hunderter-Zeiger
+\newcommand{\aviainst@altimeter@needle@hundred}
+{
+  \path [/avia/inst/altimeter/needle/hundred/border]
+    (0.1, -0.9) -- (0.1, 2.9) -- (0.0, 3.1) -- (-0.1, 2.9) -- (-0.1, -0.9) -- cycle;
+
+  \path [/avia/inst/altimeter/needle/hundred/border]
+    (0.0, -0.9) circle (0.18);
+
+  \path [/avia/inst/altimeter/needle/hundred/secondary]
+    (0.1, 0.4) -- (0.1, -0.9) -- (-0.1, -0.9) -- (-0.1, 0.4) -- cycle;
+
+  \path [/avia/inst/altimeter/needle/hundred/secondary]
+    (0.0, -0.9) circle (0.18);
+
+  \path [/avia/inst/altimeter/needle/hundred/primary]
+    (0.1, 0.4) -- (0.1, 2.9) -- (0.0, 3.1) -- (-0.1, 2.9) -- (-0.1, 0.4) -- cycle;
+}
+
+\pgfkeys{/avia/inst/altimeter/needle/hundred/primary/.style=/avia/inst/needle/primary}
+\pgfkeys{/avia/inst/altimeter/needle/hundred/secondary/.style=/avia/inst/needle/secondary}
+\pgfkeys{/avia/inst/altimeter/needle/hundred/border/.style=/avia/inst/needle/border}
+
+
+% Instrument zeichnen.
+\newcommand{\aviainstaltimeter}[1][]
+{
+  \begingroup
+
+  \pgfkeys{/avia/inst/altimeter/.cd,#1}
+
+  \pgfkeysgetvalue{/avia/inst/altimeter/altitude}{\altitude}
+  \pgfmathsetmacro{\angletenthousand}{-mod(\fpeval{\altitude / 100000} * 360, 360)}
+  \pgfmathsetmacro{\anglethousand}{-mod(\fpeval{\altitude / 10000} * 360, 360)}
+  \pgfmathsetmacro{\anglehundred}{-mod(\fpeval{\altitude / 1000} * 360, 360)}
+
+  \aviainst@frame
+  \aviainst@altimeter@face
+  \aviainst@altimeter@colsman
+
+  \begin{scope}[rotate=\angletenthousand,transform shape]
+  \aviainst@altimeter@needle@tenthousand
+  \end{scope}
+
+  \begin{scope}[rotate=\anglethousand,transform shape]
+  \aviainst@altimeter@needle@thousand
+  \end{scope}
+
+  \begin{scope}[rotate=\anglehundred,transform shape]
+  \aviainst@altimeter@needle@hundred
+  \end{scope}
+
+  % Nabe
+  \path [/avia/inst/altimeter/needle/hundred/border]
+    (0.0, 0.0) circle (0.2);
+  \path [/avia/inst/altimeter/needle/hundred/secondary]
+    (0.0, 0.0) circle (0.2);
+
+  \aviainst@border@circle
+
+  % QNH-Knopf
+  \pgfmathsetmacro{\knobcoord}{\avia@inst@mount@dist / sqrt(2)}
+  \begin{scope}[shift={(-\knobcoord,-\knobcoord)},transform shape]
+  \aviainst@knob
+  \end{scope}
+
+  \endgroup
+}
+
+
+\pgfkeys{/avia/inst/altimeter/altitude/.initial=0}
+\pgfkeys{/avia/inst/altimeter/qnh/.initial=1013.25}

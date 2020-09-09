@@ -1,0 +1,155 @@
+%
+% Variometer
+%
+
+\pgfmathsetmacro{\avia@inst@variometer@tickout}{\avia@inst@face@rad - 0.2}			% Außenradius Skalenstrich
+\pgfmathsetmacro{\avia@inst@variometer@majortickin}{\avia@inst@variometer@tickout - 0.4}	% Innenradius Skalenstrich
+\pgfmathsetmacro{\avia@inst@variometer@minortickin}{\avia@inst@variometer@tickout - 0.3}	% Innenradius Teilstrich
+
+
+% Ziffernblatt 2000fpm, linear
+\newcommand{\aviainst@variometer@function@twothousandlin}[1]
+{
+  \pgfmathsetmacro{\angle}{min(max(#1 / 2000, -1), 1) * -170}
+}
+
+\newcommand{\aviainst@variometer@face@twothousandlin}
+{
+  \begingroup
+
+  % Ziffernblatt
+  \path [/avia/inst/variometer/face/background] (0, 0) circle (\avia@inst@hole@rad);
+
+  % Skalenstriche
+  \foreach \i in {-2000,-1500,-1000,-500,0,500,1000,1500,2000}
+  {
+    \aviainst@variometer@function@twothousandlin{\i}
+    \pgfmathsetmacro{\angle}{\angle + 180}
+    \path [/avia/inst/variometer/face/majortick]
+      (\angle:\avia@inst@variometer@majortickin) -- (\angle:\avia@inst@variometer@tickout);
+  }
+
+  \foreach \i in {-900,-800,...,900}
+  {
+    \aviainst@variometer@function@twothousandlin{\i}
+    \pgfmathsetmacro{\angle}{\angle + 180}
+    \pgfmathtruncatemacro{\modulo}{Mod(\i, 500)}
+    \ifnum\modulo>0
+      \path [/avia/inst/variometer/face/minortick]
+        (\angle:\avia@inst@variometer@minortickin) -- (\angle:\avia@inst@variometer@tickout);
+    \fi
+  }
+
+  % Beschriftung
+  \begin{scope}[/avia/inst/variometer/face/number]
+  \node at (  0:2.4) {20};
+  \node at ( 45:2.4) {15};
+  \node at ( 90:2.4) {10};
+  \node at (135:2.4) { 5};
+  \node at (180:2.4) { 0};
+  \node at (225:2.4) { 5};
+  \node at (270:2.4) {10};
+  \node at (315:2.4) {15};
+  \end{scope}
+
+  % Pfeile
+  \aviainst@variometer@function@twothousandlin{150}
+  \pgfmathsetmacro{\anglearrowupfrom}{\angle + 180}
+  \aviainst@variometer@function@twothousandlin{350}
+  \pgfmathsetmacro{\anglearrowupto}{\angle + 180}
+  \aviainst@variometer@function@twothousandlin{-150}
+  \pgfmathsetmacro{\anglearrowdownfrom}{\angle + 180}
+  \aviainst@variometer@function@twothousandlin{-350}
+  \pgfmathsetmacro{\anglearrowdownto}{\angle + 180}
+
+  \path [/avia/inst/variometer/face/arrow up]
+    (\anglearrowupfrom:2.4)
+    arc [start angle=\anglearrowupfrom,end angle=\anglearrowupto,radius=2.4]
+    node [midway,below right] {UP};
+
+  \path [/avia/inst/variometer/face/arrow down]
+    (\anglearrowdownfrom:2.4)
+    arc [start angle=\anglearrowdownfrom,end angle=\anglearrowdownto,radius=2.4]
+    node [midway,above right] {DN};
+
+  % Weitere Textelemente
+  % TODO: Extra Style
+  \node [/avia/inst/variometer/face/number] at (0.0,  0.4) [font={\fontsize{12}{12}\selectfont},above] {VERTICAL SPEED};
+  \node [/avia/inst/variometer/face/number] at (0.0, -0.4) [font={\fontsize{10}{10}\selectfont},below] {100 FEET PER MIN};
+
+  \endgroup
+}
+
+\let\aviainst@variometer@function\aviainst@variometer@function@twothousandlin
+\let\aviainst@variometer@face\aviainst@variometer@face@twothousandlin
+
+\pgfkeys{/avia/inst/variometer/face/background/.style={fill=black!80}}
+\pgfkeys{/avia/inst/variometer/face/majortick/.style={draw=white,line width=3.0pt}}
+\pgfkeys{/avia/inst/variometer/face/minortick/.style={draw=white,line width=1.5pt}}
+\pgfkeys{/avia/inst/variometer/face/number/.style={text=white,font={\fontsize{24}{24}\selectfont}}}
+\pgfkeys{/avia/inst/variometer/face/arrow up/.style={draw=white,-latex,thick,text=white,font={\fontsize{8}{8}\selectfont}}}
+\pgfkeys{/avia/inst/variometer/face/arrow down/.style={draw=white,-latex,thick,text=white,font={\fontsize{8}{8}\selectfont}}}
+
+\pgfkeys{/avia/inst/variometer/type/.is choice}
+\pgfkeys{/avia/inst/variometer/type/.value required}
+\pgfkeys{/avia/inst/variometer/type/twothousandlin/.code={%
+  \let\aviainst@variometer@face\aviainst@variometer@face@twothousandlin%
+  \let\aviainst@variometer@function\aviainst@variometer@function@twothousandlin%
+}}
+\pgfkeys{/avia/inst/variometer/type=twothousandlin}
+
+
+% Zeiger
+\newcommand{\aviainst@variometer@needle}
+{
+  \path [/avia/inst/variometer/needle/border]
+    (0.1, -0.9) -- (0.1, 2.9) -- (0.0, 3.1) -- (-0.1, 2.9) -- (-0.1, -0.9) -- cycle;
+
+  \path [/avia/inst/variometer/needle/border]
+    (0.0, -0.9) circle (0.18);
+
+  \path [/avia/inst/variometer/needle/secondary]
+    (0.1, 0.4) -- (0.1, -0.9) -- (-0.1, -0.9) -- (-0.1, 0.4) -- cycle;
+
+  \path [/avia/inst/variometer/needle/secondary]
+    (0.0, -0.9) circle (0.18);
+
+  \path [/avia/inst/variometer/needle/primary]
+    (0.1, 0.4) -- (0.1, 2.9) -- (0.0, 3.1) -- (-0.1, 2.9) -- (-0.1, 0.4) -- cycle;
+}
+
+\pgfkeys{/avia/inst/variometer/needle/primary/.style=/avia/inst/needle/primary}
+\pgfkeys{/avia/inst/variometer/needle/secondary/.style=/avia/inst/needle/secondary}
+\pgfkeys{/avia/inst/variometer/needle/border/.style=/avia/inst/needle/border}
+
+
+% Instrument zeichnen.
+\newcommand{\aviainstvariometer}[1][]
+{
+  \begingroup
+
+  \pgfkeys{/avia/inst/variometer/.cd,#1}
+
+  \pgfkeysgetvalue{/avia/inst/variometer/vspeed}{\vspeed}
+  \aviainst@variometer@function{\vspeed}
+
+  \aviainst@frame
+  \aviainst@variometer@face
+
+  \begin{scope}[rotate=90,rotate=\angle,transform shape]
+  \aviainst@variometer@needle
+  \end{scope}
+
+  % Nabe
+  \path [/avia/inst/variometer/needle/border]
+    (0.0, 0.0) circle (0.2);
+  \path [/avia/inst/variometer/needle/secondary]
+    (0.0, 0.0) circle (0.2);
+
+  \aviainst@border@circle
+
+  \endgroup
+}
+
+
+\pgfkeys{/avia/inst/variometer/vspeed/.initial=0}

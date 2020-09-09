@@ -1,0 +1,180 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{aviatikz}
+
+\RequirePackage{xcolor}
+\RequirePackage{tikz}
+\RequirePackage{xfp}
+\RequirePackage{stackengine}
+\ProcessOptions\relax
+
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{decorations}
+\usetikzlibrary{decorations.pathmorphing}
+
+
+% http://www.mikesflightdeck.com/dimensions/instrument_cutouts.html
+
+
+\definecolor{avia@inst@bg}{RGB}{0,0,0}
+\definecolor{avia@inst@fg}{RGB}{255,255,255}
+\definecolor{avia@inst@markeryellow}{RGB}{248,248,82}
+\definecolor{avia@inst@flagred}{RGB}{204,64,64}
+% Himmelblau
+% Erdbraun
+
+\pgfmathsetmacro{\avia@inst@frame@width}{3.25 * 2.54 / 2}	% Außenrahmen
+\pgfmathsetmacro{\avia@inst@hole@rad}{3.126 * 2.54 / 2}		% Bohrung
+\pgfmathsetmacro{\avia@inst@mount@dist}{3.5 * 2.54 / 2}		% Mittenabstand Montierungslöcher
+\pgfmathsetmacro{\avia@inst@mount@rad}{0.17 * 2.54 / 2}		% Bohrradius Montierungslöcher
+\pgfmathsetmacro{\avia@inst@face@rad}{3.5}			% Skalenradius
+\pgfmathsetmacro{\avia@inst@knob@rad}{0.7}			% Radius Einstellknopf
+\pgfmathsetmacro{\avia@inst@knob@ring}{0.62}			% Ringradius auf dem Einstellknopf
+
+\pgfkeys{/avia/inst/needle/primary/.style={fill=white}}
+\pgfkeys{/avia/inst/needle/secondary/.style={fill=black!70}}
+\pgfkeys{/avia/inst/needle/border/.style={draw=black,line width=1pt}}
+
+
+
+%
+% Gehäuse 3.25"
+%
+
+\newcommand{\aviainst@frame@type@rect}
+{
+  \path [/avia/inst/frame/framestyle,rounded corners=1cm,even odd rule]
+    (-\avia@inst@frame@width, -\avia@inst@frame@width) rectangle (\avia@inst@frame@width, \avia@inst@frame@width)
+    ( 45:\avia@inst@mount@dist) circle (\avia@inst@mount@rad)
+    (135:\avia@inst@mount@dist) circle (\avia@inst@mount@rad)
+    (225:\avia@inst@mount@dist) circle (\avia@inst@mount@rad)
+    (315:\avia@inst@mount@dist) circle (\avia@inst@mount@rad);
+}
+
+\newcommand{\aviainst@frame@type@standard}
+{
+  \path [/avia/inst/frame/framestyle,rounded corners=0.2cm,even odd rule]
+    ( \avia@inst@frame@width,  2) -- ( 45:5) -- ( 2,  \avia@inst@frame@width) --
+    (-2,  \avia@inst@frame@width) -- (135:5) -- (-\avia@inst@frame@width,  2) --
+    (-\avia@inst@frame@width, -2) -- (225:5) -- (-2, -\avia@inst@frame@width) --
+    ( 2, -\avia@inst@frame@width) -- (315:5) -- ( \avia@inst@frame@width, -2) --
+    cycle
+    ( 45:\avia@inst@mount@dist) circle (\avia@inst@mount@rad)
+    (135:\avia@inst@mount@dist) circle (\avia@inst@mount@rad)
+    (225:\avia@inst@mount@dist) circle (\avia@inst@mount@rad)
+    (315:\avia@inst@mount@dist) circle (\avia@inst@mount@rad);
+}
+
+\newcommand{\aviainst@frame@type@standardleft}
+{
+  \path [/avia/inst/frame/framestyle,rounded corners=0.2cm,even odd rule]
+    ( \avia@inst@frame@width,  2) -- ( 45:5) -- ( 2,  \avia@inst@frame@width) --
+    (-2,  \avia@inst@frame@width) -- (135:5) -- (-\avia@inst@frame@width,  2)
+    { [rounded corners=1cm] -- (-\avia@inst@frame@width, -\avia@inst@frame@width) } --
+    ( 2, -\avia@inst@frame@width) -- (315:5) -- ( \avia@inst@frame@width, -2) --
+    cycle
+    ( 45:\avia@inst@mount@dist) circle (\avia@inst@mount@rad)
+    (135:\avia@inst@mount@dist) circle (\avia@inst@mount@rad)
+    (315:\avia@inst@mount@dist) circle (\avia@inst@mount@rad);
+}
+
+\newcommand{\aviainst@frame@type@standardright}
+{
+  \path [/avia/inst/frame/framestyle,rounded corners=0.2cm,even odd rule]
+    ( \avia@inst@frame@width,  2) -- ( 45:5) -- ( 2,  \avia@inst@frame@width) --
+    (-2,  \avia@inst@frame@width) -- (135:5) -- (-\avia@inst@frame@width,  2) --
+    (-\avia@inst@frame@width, -2) -- (225:5) -- (-2, -\avia@inst@frame@width)
+    { [rounded corners=1cm] -- ( \avia@inst@frame@width, -\avia@inst@frame@width) } --
+    cycle
+    ( 45:\avia@inst@mount@dist) circle (\avia@inst@mount@rad)
+    (135:\avia@inst@mount@dist) circle (\avia@inst@mount@rad)
+    (225:\avia@inst@mount@dist) circle (\avia@inst@mount@rad);
+}
+
+\newcommand{\aviainst@frame@type@standardleftright}
+{
+  \path [/avia/inst/frame/framestyle,rounded corners=0.2cm,even odd rule]
+    ( \avia@inst@frame@width,  2) -- ( 45:5) -- ( 2,  \avia@inst@frame@width) --
+    (-2,  \avia@inst@frame@width) -- (135:5) -- (-\avia@inst@frame@width,  2)
+    { [rounded corners=1cm] -- (-\avia@inst@frame@width, -\avia@inst@frame@width) }
+    { [rounded corners=1cm] -- ( \avia@inst@frame@width, -\avia@inst@frame@width) } --
+    cycle
+    ( 45:\avia@inst@mount@dist) circle (\avia@inst@mount@rad)
+    (135:\avia@inst@mount@dist) circle (\avia@inst@mount@rad);
+}
+
+\let\aviainst@frame@type\aviainst@frame@type@rect
+
+\newcommand{\aviainst@frame}[1][]
+{
+  \begingroup
+  \pgfkeys{/avia/inst/frame/.cd,#1}
+  \aviainst@frame@type
+  \endgroup
+}
+
+\pgfkeys{/avia/inst/frame/framestyle/.style={draw=black,fill=black!70}}
+\pgfkeys{/avia/inst/frame/type/.is choice}
+\pgfkeys{/avia/inst/frame/type/.value required}
+\pgfkeys{/avia/inst/frame/type/rect/.code={\let\aviainst@frame@type\aviainst@frame@type@rect}}
+\pgfkeys{/avia/inst/frame/type/standard/.code={\let\aviainst@frame@type\aviainst@frame@type@standard}}
+\pgfkeys{/avia/inst/frame/type/standardleft/.code={\let\aviainst@frame@type\aviainst@frame@type@standardleft}}
+\pgfkeys{/avia/inst/frame/type/standardright/.code={\let\aviainst@frame@type\aviainst@frame@type@standardright}}
+\pgfkeys{/avia/inst/frame/type/standardleftright/.code={\let\aviainst@frame@type\aviainst@frame@type@standardleftright}}
+\pgfkeys{/avia/inst/frame/type=rect}
+
+
+%
+% Rahmen 3.125"
+%
+
+\newcommand{\aviainst@border@circle}
+{
+  \begingroup
+
+  \pgfmathsetmacro{\midrad}{(2 * \avia@inst@hole@rad + \avia@inst@face@rad) / 3}
+
+  \path [/avia/inst/border/circle/outer ring,even odd rule]
+    (0, 0) circle (\avia@inst@hole@rad)
+    (0, 0) circle (\midrad);
+  \path [/avia/inst/border/circle/inner ring,even odd rule]
+    (0, 0) circle (\midrad)
+    (0, 0) circle (\avia@inst@face@rad);
+  \path [/avia/inst/border/circle/outer border]
+    (0, 0) circle (\avia@inst@hole@rad);
+  \path [/avia/inst/border/circle/middle border]
+    (0, 0) circle (\midrad);
+  \path [/avia/inst/border/circle/inner border]
+    (0, 0) circle (\avia@inst@face@rad);
+
+  \endgroup
+}
+
+\pgfkeys{/avia/inst/border/circle/outer ring/.style={shade,top color=black!60,bottom color=black!90}}
+\pgfkeys{/avia/inst/border/circle/inner ring/.style={shade,top color=black!90,bottom color=black!60}}
+\pgfkeys{/avia/inst/border/circle/outer border/.style={draw=black,thin}}
+\pgfkeys{/avia/inst/border/circle/middle border/.style={draw=black,thin}}
+\pgfkeys{/avia/inst/border/circle/inner border/.style={draw=black,thin}}
+
+
+%
+% Einstellknopf
+%
+
+\newcommand{\aviainst@knob}
+{
+  \begingroup
+  \path [/avia/inst/knob/background,decorate,decoration={name=zigzag,segment length=4.0,amplitude=0.8}]
+    (0, 0) circle (\avia@inst@knob@rad);
+  \path [/avia/inst/knob/ring]
+    (0, 0) circle (\avia@inst@knob@ring);
+  \endgroup
+}
+
+\pgfkeys{/avia/inst/knob/background/.style={draw=lightgray,fill=black!80,shade,bottom color=black!90,top color=black!70}}
+\pgfkeys{/avia/inst/knob/ring/.style={draw=white}}
+
+
+\input{aviatikz.inst.altimeter.sty}
+\input{aviatikz.inst.variometer.sty}
+\input{aviatikz.inst.cdi.sty}
