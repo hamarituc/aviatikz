@@ -175,6 +175,20 @@
 \pgfkeys{/avia/inst/knob/ring/.style={draw=white}}
 
 
+%
+% Kursangaben
+%
+\newcommand{\aviainst@crs@number}[1]{#1}
+\newcommand{\aviainst@crs@letter}[1]
+{
+  \ifnum\numexpr#1\relax=0 N\else
+  \ifnum\numexpr#1\relax=9 E\else
+  \ifnum\numexpr#1\relax=18 S\else
+  \ifnum\numexpr#1\relax=27 W\else
+  #1\fi\fi\fi\fi
+}
+
+
 \input{aviatikz.inst.altimeter.sty}
 \input{aviatikz.inst.variometer.sty}
 \input{aviatikz.inst.cdi.sty}

@@ -322,6 +322,8 @@
 
 
 % Kursskala
+\let\aviainst@cdi@course@label\aviainst@crs@letter
+
 \newcommand{\aviainst@cdi@course}
 {
   \begingroup
@@ -334,12 +336,8 @@
   {
     \pgfmathsetmacro{\angle}{-10 * \i + 90}
     \pgfmathsetmacro{\anglelabel}{\angle - 90}
-    \ifnum\i=0\def\courselabel{N}\else
-    \ifnum\i=9\def\courselabel{E}\else
-    \ifnum\i=18\def\courselabel{S}\else
-    \ifnum\i=27\def\courselabel{W}\else
-    \def\courselabel{\i}\fi\fi\fi\fi
-    \node [/avia/inst/cdi/course/number] at (\angle:\avia@inst@cdi@coursenumrad) [rotate=\anglelabel] {\courselabel};
+    \node [/avia/inst/cdi/course/number] at
+      (\angle:\avia@inst@cdi@coursenumrad) [rotate=\anglelabel] {\aviainst@cdi@course@label{\i}};
   }
 
   \foreach \i in {0,10,...,350}
@@ -370,7 +368,12 @@
 \pgfkeys{/avia/inst/cdi/course/majortick/.style={draw=white,line width=1.0pt}}
 \pgfkeys{/avia/inst/cdi/course/minortick/.style={draw=white,line width=1.0pt}}
 \pgfkeys{/avia/inst/cdi/course/number/.style={text=white,font={\fontsize{16}{16}\selectfont}}}
-% TODO: Buchstaben oder Zahlen für Himmelsrichtungen
+
+\pgfkeys{/avia/inst/cdi/course/style/.is choice}
+\pgfkeys{/avia/inst/cdi/course/style/.value required}
+\pgfkeys{/avia/inst/cdi/course/style/number/.code={\let\aviainst@cdi@course@label\aviainst@crs@number}}
+\pgfkeys{/avia/inst/cdi/course/style/letter/.code={\let\aviainst@cdi@course@label\aviainst@crs@letter}}
+\pgfkeys{/avia/inst/cdi/course/style=letter}
 
 
 % Kursmarker
