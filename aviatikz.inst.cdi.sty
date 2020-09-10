@@ -2,12 +2,12 @@
 % CDI-Anzeige
 %
 
-\pgfmathsetmacro{\avia@inst@cdi@courseoutrad}{\avia@inst@face@rad}		% Außenradius Kursskala
-\pgfmathsetmacro{\avia@inst@cdi@courseinrad}{\avia@inst@face@rad - 0.9}		% Innenradius Kursskala
-\pgfmathsetmacro{\avia@inst@cdi@coursenumrad}{\avia@inst@face@rad - 0.4}	% Beschriftungsradius Kursskala
-\pgfmathsetmacro{\avia@inst@cdi@coursemainrad}{\avia@inst@face@rad - 0.8}	% Außenradius Skalenstrich mit Bezeichner
-\pgfmathsetmacro{\avia@inst@cdi@coursemajorrad}{\avia@inst@face@rad - 0.6}	% Außenradius Skalenstrich ohne Bezeichner
-\pgfmathsetmacro{\avia@inst@cdi@courseminorrad}{\avia@inst@face@rad - 0.8}	% Außenradius Teilstrich
+\pgfmathsetmacro{\avia@inst@cdi@dialoutrad}{\avia@inst@face@rad}		% Außenradius Kursskala
+\pgfmathsetmacro{\avia@inst@cdi@dialinrad}{\avia@inst@face@rad - 0.9}		% Innenradius Kursskala
+\pgfmathsetmacro{\avia@inst@cdi@dialnumrad}{\avia@inst@face@rad - 0.4}	% Beschriftungsradius Kursskala
+\pgfmathsetmacro{\avia@inst@cdi@dialmainrad}{\avia@inst@face@rad - 0.8}	% Außenradius Skalenstrich mit Bezeichner
+\pgfmathsetmacro{\avia@inst@cdi@dialmajorrad}{\avia@inst@face@rad - 0.6}	% Außenradius Skalenstrich ohne Bezeichner
+\pgfmathsetmacro{\avia@inst@cdi@dialminorrad}{\avia@inst@face@rad - 0.8}	% Außenradius Teilstrich
 \pgfmathsetmacro{\avia@inst@cdi@devscalewidth}{0.3}				% Halbbreite Ablageskala
 \pgfmathsetmacro{\avia@inst@cdi@devscaleheight}{2.3}				% Halbhöhe Ablageskala
 \pgfmathsetmacro{\avia@inst@cdi@markerwidth}{0.20}				% Halbbreite Ablagemarker (Linie)
@@ -296,7 +296,7 @@
   \pgfmathsetmacro{\deviationx}{-min(max(\pgfkeysvalueof{/avia/inst/cdi/xdev}, -6), 6) * \avia@inst@cdi@markerdist}
   \pgfmathsetmacro{\deviationy}{-min(max(\pgfkeysvalueof{/avia/inst/cdi/ydev}, -6), 6) * \avia@inst@cdi@markerdist}
 
-  \clip (0, 0) circle (\avia@inst@cdi@courseinrad);
+  \clip (0, 0) circle (\avia@inst@cdi@dialinrad);
 
   % Ablage bzw. Localizer
   \begin{scope}[shift={(\deviationx, 0)}]
@@ -322,22 +322,22 @@
 
 
 % Kursskala
-\let\aviainst@cdi@course@label\aviainst@crs@letter
+\let\aviainst@cdi@dial@label\aviainst@crs@letter
 
-\newcommand{\aviainst@cdi@course}
+\newcommand{\aviainst@cdi@dial}
 {
   \begingroup
 
-  \path [/avia/inst/cdi/course/background,even odd rule]
-    (0, 0) circle (\avia@inst@cdi@courseoutrad)
-    (0, 0) circle (\avia@inst@cdi@courseinrad);
+  \path [/avia/inst/cdi/dial/background,even odd rule]
+    (0, 0) circle (\avia@inst@cdi@dialoutrad)
+    (0, 0) circle (\avia@inst@cdi@dialinrad);
 
   \foreach \i in {0,3,...,33}
   {
     \pgfmathsetmacro{\angle}{-10 * \i + 90}
     \pgfmathsetmacro{\anglelabel}{\angle - 90}
-    \node [/avia/inst/cdi/course/number] at
-      (\angle:\avia@inst@cdi@coursenumrad) [rotate=\anglelabel] {\aviainst@cdi@course@label{\i}};
+    \node [/avia/inst/cdi/dial/number] at
+      (\angle:\avia@inst@cdi@dialnumrad) [rotate=\anglelabel] {\aviainst@cdi@dial@label{\i}};
   }
 
   \foreach \i in {0,10,...,350}
@@ -345,50 +345,50 @@
     \pgfmathsetmacro{\angle}{\i + 90}
     \pgfmathtruncatemacro{\modulo}{mod(\i, 30)}
     \ifnum\modulo=0
-      \path [/avia/inst/cdi/course/maintick]
-        (\angle:\avia@inst@cdi@courseinrad) -- (\angle:\avia@inst@cdi@coursemainrad);
+      \path [/avia/inst/cdi/dial/maintick]
+        (\angle:\avia@inst@cdi@dialinrad) -- (\angle:\avia@inst@cdi@dialmainrad);
     \else
-      \path [/avia/inst/cdi/course/majortick]
-        (\angle:\avia@inst@cdi@courseinrad) -- (\angle:\avia@inst@cdi@coursemajorrad);
+      \path [/avia/inst/cdi/dial/majortick]
+        (\angle:\avia@inst@cdi@dialinrad) -- (\angle:\avia@inst@cdi@dialmajorrad);
     \fi
   }
 
   \foreach \i in {5,15,...,355}
   {
     \pgfmathsetmacro{\angle}{\i + 90}
-    \path [/avia/inst/cdi/course/minortick]
-      (\angle:\avia@inst@cdi@courseinrad) -- (\angle:\avia@inst@cdi@courseminorrad);
+    \path [/avia/inst/cdi/dial/minortick]
+      (\angle:\avia@inst@cdi@dialinrad) -- (\angle:\avia@inst@cdi@dialminorrad);
   }
 
   \endgroup
 }
 
-\pgfkeys{/avia/inst/cdi/course/background/.style={fill=black!90}}
-\pgfkeys{/avia/inst/cdi/course/maintick/.style={draw=white,line width=2.0pt}}
-\pgfkeys{/avia/inst/cdi/course/majortick/.style={draw=white,line width=1.0pt}}
-\pgfkeys{/avia/inst/cdi/course/minortick/.style={draw=white,line width=1.0pt}}
-\pgfkeys{/avia/inst/cdi/course/number/.style={text=white,font={\fontsize{16}{16}\selectfont}}}
+\pgfkeys{/avia/inst/cdi/dial/background/.style={fill=black!90}}
+\pgfkeys{/avia/inst/cdi/dial/maintick/.style={draw=white,line width=2.0pt}}
+\pgfkeys{/avia/inst/cdi/dial/majortick/.style={draw=white,line width=1.0pt}}
+\pgfkeys{/avia/inst/cdi/dial/minortick/.style={draw=white,line width=1.0pt}}
+\pgfkeys{/avia/inst/cdi/dial/number/.style={text=white,font={\fontsize{16}{16}\selectfont}}}
 
-\pgfkeys{/avia/inst/cdi/course/style/.is choice}
-\pgfkeys{/avia/inst/cdi/course/style/.value required}
-\pgfkeys{/avia/inst/cdi/course/style/number/.code={\let\aviainst@cdi@course@label\aviainst@crs@number}}
-\pgfkeys{/avia/inst/cdi/course/style/letter/.code={\let\aviainst@cdi@course@label\aviainst@crs@letter}}
-\pgfkeys{/avia/inst/cdi/course/style=letter}
+\pgfkeys{/avia/inst/cdi/dial/style/.is choice}
+\pgfkeys{/avia/inst/cdi/dial/style/.value required}
+\pgfkeys{/avia/inst/cdi/dial/style/number/.code={\let\aviainst@cdi@dial@label\aviainst@crs@number}}
+\pgfkeys{/avia/inst/cdi/dial/style/letter/.code={\let\aviainst@cdi@dial@label\aviainst@crs@letter}}
+\pgfkeys{/avia/inst/cdi/dial/style=letter}
 
 
 % Kursmarker
-\newcommand{\aviainst@cdi@coursemarker}
+\newcommand{\aviainst@cdi@dialmarker}
 {
-  \path [/avia/inst/cdi/course/marker forward]
-    (0.0,  \avia@inst@cdi@courseinrad) -- ++(-60:0.40) -- ++(-0.40, 0.0) --
+  \path [/avia/inst/cdi/dial/marker forward]
+    (0.0,  \avia@inst@cdi@dialinrad) -- ++(-60:0.40) -- ++(-0.40, 0.0) --
     cycle;
-  \path [/avia/inst/cdi/course/marker reverse]
-    (0.0, -\avia@inst@cdi@courseinrad) -- ++( 60:0.25) -- ++(-0.25, 0.0) --
+  \path [/avia/inst/cdi/dial/marker reverse]
+    (0.0, -\avia@inst@cdi@dialinrad) -- ++( 60:0.25) -- ++(-0.25, 0.0) --
     cycle;
 }
 
-\pgfkeys{/avia/inst/cdi/course/marker forward/.style={fill=avia@inst@markeryellow,draw=black,thin}}
-\pgfkeys{/avia/inst/cdi/course/marker reverse/.style={fill=avia@inst@markeryellow,draw=black,thin}}
+\pgfkeys{/avia/inst/cdi/dial/marker forward/.style={fill=avia@inst@markeryellow,draw=black,thin}}
+\pgfkeys{/avia/inst/cdi/dial/marker reverse/.style={fill=avia@inst@markeryellow,draw=black,thin}}
 
 
 % OBS-Knopf
@@ -420,10 +420,10 @@
   \aviainst@cdi@needle
 
   \begin{scope}[rotate=\obs,transform shape]
-  \aviainst@cdi@course
+  \aviainst@cdi@dial
   \end{scope}
 
-  \aviainst@cdi@coursemarker
+  \aviainst@cdi@dialmarker
 
   \aviainst@border@circle
 
