@@ -1,0 +1,248 @@
+%
+% ADF-Anzeige
+%
+
+\pgfmathsetmacro{\avia@inst@adf@dialoutrad}{\avia@inst@face@rad}		% Außenradius Kursskala
+\pgfmathsetmacro{\avia@inst@adf@dialinrad}{\avia@inst@face@rad - 0.9}		% Innenradius Kursskala
+\pgfmathsetmacro{\avia@inst@adf@dialnumrad}{\avia@inst@face@rad - 0.4}		% Beschriftungsradius Kursskala
+\pgfmathsetmacro{\avia@inst@adf@dialmainrad}{\avia@inst@face@rad - 0.8}		% Außenradius Skalenstrich mit Bezeichner
+\pgfmathsetmacro{\avia@inst@adf@dialmajorrad}{\avia@inst@face@rad - 0.6}	% Außenradius Skalenstrich ohne Bezeichner
+\pgfmathsetmacro{\avia@inst@adf@dialminorrad}{\avia@inst@face@rad - 0.8}	% Außenradius Teilstrich
+\pgfmathsetmacro{\avia@inst@adf@marker@forworad}{\avia@inst@face@rad}		% Außenradius Vorausmarke
+\pgfmathsetmacro{\avia@inst@adf@marker@forwirad}{\avia@inst@face@rad - 1.0}	% Innenradius Vorausmarke
+\pgfmathsetmacro{\avia@inst@adf@marker@revorad}{\avia@inst@face@rad}		% Außenradius Rückmarke
+\pgfmathsetmacro{\avia@inst@adf@marker@revirad}{\avia@inst@face@rad - 0.3}	% Innenradius Rückmarke
+\pgfmathsetmacro{\avia@inst@adf@marker@abeamorad}{\avia@inst@face@rad}		% Außenradius Querabmarken
+\pgfmathsetmacro{\avia@inst@adf@marker@abeamirad}{\avia@inst@face@rad - 0.3}	% Innenradius Querabmarken
+\pgfmathsetmacro{\avia@inst@adf@marker@diagorad}{\avia@inst@face@rad}		% Außenradius 45°-Marken
+\pgfmathsetmacro{\avia@inst@adf@marker@diagirad}{\avia@inst@face@rad - 0.3}	% Innenradius 45°-Marken
+\pgfmathsetmacro{\avia@inst@adf@needleorad}{\avia@inst@adf@dialinrad - 0.1}	% Außenradius Anzeigenadel
+\pgfmathsetmacro{\avia@inst@adf@needleirad}{-\avia@inst@adf@dialinrad + 0.1}	% Innenradius Anzeigenadel
+
+
+% Hintergrund
+\newcommand{\aviainst@adf@face}
+{
+  % Hintergrund
+  \path [/avia/inst/adf/face/background] (0, 0) circle (\avia@inst@hole@rad);
+}
+
+\pgfkeys{/avia/inst/adf/face/background/.style={fill=black!80}}
+
+
+% Nadel
+\newcommand{\aviainst@adf@needle}
+{
+  \draw [/avia/inst/adf/needle]
+    (90:\avia@inst@adf@needleirad) -- (90:\avia@inst@adf@needleorad);
+}
+
+\pgfkeys{/avia/inst/adf/needle/.style={draw=avia@inst@markeryellow,line width=2.5pt,arrows={-Latex[length=24pt,width=12pt]}}}
+
+
+% Peilungsskala
+\let\aviainst@adf@dial@label\aviainst@crs@letter
+
+\newcommand{\aviainst@adf@realdial}
+{
+  \begingroup
+
+  \path [/avia/inst/adf/dial/background,even odd rule]
+    (0, 0) circle (\avia@inst@adf@dialoutrad)
+    (0, 0) circle (\avia@inst@adf@dialinrad);
+
+  \foreach \i in {0,3,...,33}
+  {
+    \pgfmathsetmacro{\angle}{-10 * \i + 90}
+    \pgfmathsetmacro{\anglelabel}{\angle - 90}
+    \node [/avia/inst/adf/dial/number] at
+      (\angle:\avia@inst@adf@dialnumrad) [rotate=\anglelabel] {\aviainst@adf@dial@label{\i}};
+  }
+
+  \foreach \i in {0,10,...,350}
+  {
+    \pgfmathsetmacro{\angle}{\i + 90}
+    \pgfmathtruncatemacro{\modulo}{mod(\i, 30)}
+    \ifnum\modulo=0
+      \path [/avia/inst/adf/dial/maintick]
+        (\angle:\avia@inst@adf@dialinrad) -- (\angle:\avia@inst@adf@dialmainrad);
+    \else
+      \path [/avia/inst/adf/dial/majortick]
+        (\angle:\avia@inst@adf@dialinrad) -- (\angle:\avia@inst@adf@dialmajorrad);
+    \fi
+  }
+
+  \foreach \i in {5,15,...,355}
+  {
+    \pgfmathsetmacro{\angle}{\i + 90}
+    \path [/avia/inst/adf/dial/minortick]
+      (\angle:\avia@inst@adf@dialinrad) -- (\angle:\avia@inst@adf@dialminorrad);
+  }
+
+  \endgroup
+}
+
+% Skala für RBI
+\newcommand{\aviainst@adf@dial@rb}
+{
+  \begingroup
+  \let\aviainst@adf@dial@label\aviainst@crs@number
+  \aviainst@adf@realdial
+  \endgroup
+}
+
+% Skala für MDI und RMI
+\newcommand{\aviainst@adf@dial@hdg}
+{
+  \begingroup
+  \pgfkeysgetvalue{/avia/inst/adf/hdg}{\hdg}
+
+  \begin{scope}[rotate=\hdg,transform shape]
+  \aviainst@adf@realdial
+  \end{scope}
+  \endgroup
+}
+
+\let\aviainst@adf@dial\aviainst@adf@dial@rb
+
+\pgfkeys{/avia/inst/adf/dial/background/.style={fill=black!90}}
+\pgfkeys{/avia/inst/adf/dial/maintick/.style={draw=white,line width=2.0pt}}
+\pgfkeys{/avia/inst/adf/dial/majortick/.style={draw=white,line width=1.0pt}}
+\pgfkeys{/avia/inst/adf/dial/minortick/.style={draw=white,line width=1.0pt}}
+\pgfkeys{/avia/inst/adf/dial/number/.style={text=white,font={\fontsize{16}{16}\selectfont}}}
+
+\pgfkeys{/avia/inst/adf/dial/style/.is choice}
+\pgfkeys{/avia/inst/adf/dial/style/.value required}
+\pgfkeys{/avia/inst/adf/dial/style/number/.code={\let\aviainst@adf@dial@label\aviainst@crs@number}}
+\pgfkeys{/avia/inst/adf/dial/style/letter/.code={\let\aviainst@adf@dial@label\aviainst@crs@letter}}
+\pgfkeys{/avia/inst/adf/dial/style=letter}
+
+\pgfkeys{/avia/inst/adf/dial/type/.is choice}
+\pgfkeys{/avia/inst/adf/dial/type/.value required}
+\pgfkeys{/avia/inst/adf/dial/type/rb/.code={\let\aviainst@adf@dial\aviainst@adf@dial@rb}}
+\pgfkeys{/avia/inst/adf/dial/type/hdg/.code={\let\aviainst@adf@dial\aviainst@adf@dial@hdg}}
+\pgfkeys{/avia/inst/adf/dial/type=rb}
+
+
+% Peilungsmarker
+\newcommand{\aviainst@adf@marker}
+{
+  \path [/avia/inst/adf/dial/marker,arrows={Latex[reversed,length=16pt,width=8pt]-}]
+    ( 90:\avia@inst@adf@marker@forworad) -- ( 90:\avia@inst@adf@marker@forwirad);
+  \path [/avia/inst/adf/dial/marker]
+    (270:\avia@inst@adf@marker@revorad)  -- (270:\avia@inst@adf@marker@revirad);
+
+  \foreach \i in {0,180}
+  {
+    \path [/avia/inst/adf/dial/marker]
+      (\i:\avia@inst@adf@marker@abeamorad) -- (\i:\avia@inst@adf@marker@abeamirad);
+  }
+
+  \foreach \i in {45,135,225,315}
+  {
+    \path [/avia/inst/adf/dial/marker]
+      (\i:\avia@inst@adf@marker@diagorad) -- (\i:\avia@inst@adf@marker@diagirad);
+  }
+}
+
+\pgfkeys{/avia/inst/adf/dial/marker/.style={draw=avia@inst@markeryellow,line width=1.5pt}}
+
+
+% Flugzeugsymbol
+\newcommand{\aviainst@adf@acft}
+{
+  \path [/avia/inst/adf/dial/acft/border]
+    (-0.5,  0.0) -- ( 0.5,  0.0)
+    ( 0.0,  0.3) -- ( 0.0, -0.9)
+    (-0.2, -0.7) -- ( 0.2, -0.7);
+  \path [/avia/inst/adf/dial/acft/symbol]
+    (-0.5,  0.0) -- ( 0.5,  0.0)
+    ( 0.0,  0.3) -- ( 0.0, -0.9)
+    (-0.2, -0.7) -- ( 0.2, -0.7);
+}
+
+\pgfkeys{/avia/inst/adf/dial/acft/border/.style={draw=black,line cap=rect,line width=2.5pt}}
+\pgfkeys{/avia/inst/adf/dial/acft/symbol/.style={draw=avia@inst@markerorange,line cap=rect,line width=1.5pt}}
+
+
+% HDG-Knopf
+\newif\ifavia@inst@adf@hasknob\avia@inst@adf@hasknobtrue
+\pgfkeys{/avia/inst/adf/knob/.is if=avia@inst@adf@hasknob}
+\pgfkeys{/avia/inst/adf/knob=true}
+
+\newcommand{\aviainst@adf@knob}
+{
+  \begingroup
+  \ifavia@inst@adf@hasknob
+  \aviainst@knob
+  \node [/avia/inst/adf/knob/label] at (0, 0) {HDG};
+  \fi
+  \endgroup
+}
+
+\pgfkeys{/avia/inst/adf/knob/label/.style={text=avia@inst@markeryellow,font={\fontsize{12}{12}\selectfont\bfseries}}}
+
+
+% Instrument zeichnen.
+\newcommand{\aviainstadf}[1][]
+{
+  \begingroup
+
+  \pgfkeys{/avia/inst/adf/.cd,#1}
+
+  \pgfkeysgetvalue{/avia/inst/adf/rb}{\rb}
+  \pgfmathsetmacro{\rb}{-\rb}
+
+  \aviainst@frame
+  \aviainst@adf@face
+
+  \begin{scope}[rotate=\rb]
+  \aviainst@adf@needle
+  \end{scope}
+
+  \aviainst@adf@dial
+  \aviainst@adf@marker
+  \aviainst@adf@acft
+
+  \aviainst@border@circle
+
+  % HDG-Knopf
+  \begingroup
+  \pgfmathsetmacro{\knobcoord}{\avia@inst@mount@dist / sqrt(2)}
+  \begin{scope}[shift={(-\knobcoord,-\knobcoord)},rotate=\rb,transform shape]
+  \aviainst@adf@knob
+  \end{scope}
+  \endgroup
+
+  \endgroup
+}
+
+
+% Anzeigetyp
+\pgfkeys{/avia/inst/adf/type/.is choice}
+\pgfkeys{/avia/inst/adf/type/rbi/.style={/avia/inst/adf/.cd,dial/type=rb,knob=false}}
+\pgfkeys{/avia/inst/adf/type/mdi/.style={/avia/inst/adf/.cd,dial/type=hdg,knob=true}}
+\pgfkeys{/avia/inst/adf/type/rmi/.style={/avia/inst/adf/.cd,dial/type=hdg,knob=true}}
+\pgfkeys{/avia/inst/adf/type=mdi}
+
+% Einstellungen
+\pgfkeys{/avia/inst/adf/rb/.initial=90}
+\pgfkeys{/avia/inst/adf/rb/.value required}
+\pgfkeys{/avia/inst/adf/hdg/.initial=0}
+\pgfkeys{/avia/inst/adf/hdg/.value required}
+
+% Ausgangseinstellung
+\pgfkeys{/avia/inst/adf/.cd,type=mdi}
+
+
+% Anzeige aus (True/Magnetic) Bearing und Heading berechnen.
+\pgfkeys{/avia/inst/adf/brng hdg/.code 2 args={
+  \pgfmathsetmacro{\rb}{#1 - #2}
+  \pgfkeysalso{/avia/inst/adf/.cd,rb/.expanded=\rb,hdg/.expanded=#2}
+}}
+
+% Anzeige aus (True/Magnetic) Bearing und RB berechnen.
+\pgfkeys{/avia/inst/adf/brng rb/.code 2 args={
+  \pgfmathsetmacro{\hdg}{#1 - #2}
+  \pgfkeysalso{/avia/inst/adf/.cd,rb/.expanded=#2,hdg/.expanded=\hdg}
+}}
