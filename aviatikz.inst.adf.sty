@@ -127,42 +127,42 @@
 % Peilungsmarker
 \newcommand{\aviainst@adf@marker}
 {
-  \path [/avia/inst/adf/dial/marker,arrows={Latex[reversed,length=16pt,width=8pt]-}]
+  \path [/avia/inst/adf/marker,arrows={Latex[reversed,length=16pt,width=8pt]-}]
     ( 90:\avia@inst@adf@marker@forworad) -- ( 90:\avia@inst@adf@marker@forwirad);
-  \path [/avia/inst/adf/dial/marker]
+  \path [/avia/inst/adf/marker]
     (270:\avia@inst@adf@marker@revorad)  -- (270:\avia@inst@adf@marker@revirad);
 
   \foreach \i in {0,180}
   {
-    \path [/avia/inst/adf/dial/marker]
+    \path [/avia/inst/adf/marker]
       (\i:\avia@inst@adf@marker@abeamorad) -- (\i:\avia@inst@adf@marker@abeamirad);
   }
 
   \foreach \i in {45,135,225,315}
   {
-    \path [/avia/inst/adf/dial/marker]
+    \path [/avia/inst/adf/marker]
       (\i:\avia@inst@adf@marker@diagorad) -- (\i:\avia@inst@adf@marker@diagirad);
   }
 }
 
-\pgfkeys{/avia/inst/adf/dial/marker/.style={draw=avia@inst@markeryellow,line width=1.5pt}}
+\pgfkeys{/avia/inst/adf/marker/.style={draw=avia@inst@markeryellow,line width=1.5pt}}
 
 
 % Flugzeugsymbol
 \newcommand{\aviainst@adf@acft}
 {
-  \path [/avia/inst/adf/dial/acft/border]
+  \path [/avia/inst/adf/acft/border]
     (-0.5,  0.0) -- ( 0.5,  0.0)
     ( 0.0,  0.3) -- ( 0.0, -0.9)
     (-0.2, -0.7) -- ( 0.2, -0.7);
-  \path [/avia/inst/adf/dial/acft/symbol]
+  \path [/avia/inst/adf/acft/symbol]
     (-0.5,  0.0) -- ( 0.5,  0.0)
     ( 0.0,  0.3) -- ( 0.0, -0.9)
     (-0.2, -0.7) -- ( 0.2, -0.7);
 }
 
-\pgfkeys{/avia/inst/adf/dial/acft/border/.style={draw=black,line cap=rect,line width=2.5pt}}
-\pgfkeys{/avia/inst/adf/dial/acft/symbol/.style={draw=avia@inst@markerorange,line cap=rect,line width=1.5pt}}
+\pgfkeys{/avia/inst/adf/acft/border/.style={draw=black,line cap=rect,line width=2.5pt}}
+\pgfkeys{/avia/inst/adf/acft/symbol/.style={draw=avia@inst@markerorange,line cap=rect,line width=1.5pt}}
 
 
 % HDG-Knopf
