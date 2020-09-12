@@ -1,0 +1,209 @@
+%
+% Wendezeiger
+%
+
+\pgfmathsetmacro{\avia@inst@tc@ringoutrad}{\avia@inst@face@rad}			% Außenradius Skala
+\pgfmathsetmacro{\avia@inst@tc@ringinrad}{\avia@inst@face@rad - 0.9}		% Innenradius Skala
+\pgfmathsetmacro{\avia@inst@tc@ringlabelrad}{\avia@inst@face@rad - 0.45}	% Beschriftungsradius Skala
+\pgfmathsetmacro{\avia@inst@tc@markeroutrad}{\avia@inst@face@rad - 0.2}		% Außenradius Strichmarker
+\pgfmathsetmacro{\avia@inst@tc@markerinrad}{\avia@inst@face@rad - 0.8}		% Innenradius Strichmarker
+\pgfmathsetmacro{\avia@inst@tc@markerthick}{0.05}				% Halbdicke Strickmarker
+\pgfmathsetmacro{\avia@inst@tc@markerdist}{\avia@inst@face@rad - 0.7}		% Abstand Punktmarker
+\pgfmathsetmacro{\avia@inst@tc@markerrad}{0.03}					% Radius Punktmarker
+\pgfmathsetmacro{\avia@inst@tc@needleoutrad}{\avia@inst@face@rad - 1.0}		% Außenradius Anzeigenadel
+\pgfmathsetmacro{\avia@inst@tc@slipinrad}{2.8 * \avia@inst@face@rad - 0.2}	% Innenradius Scheinlotanzeige
+\pgfmathsetmacro{\avia@inst@tc@slipoutrad}{2.8 * \avia@inst@face@rad + 0.5}	% Außenradius Scheinlotanzeige
+\pgfmathsetmacro{\avia@inst@tc@slipshift}{\avia@inst@tc@slipinrad - 1.1}	% Krümmungsmittelpunkt Scheinlotanzeige
+\pgfmathsetmacro{\avia@inst@tc@sliplangle}{257}					% Linksanschlag Scheinlotanzeige
+\pgfmathsetmacro{\avia@inst@tc@sliprangle}{283}					% Rechtsanschlag Scheinlotanzeige
+\pgfmathsetmacro{\avia@inst@tc@slipdist}{0.3}					% Halbabstand der Scheinlotmarker
+\pgfmathsetmacro{\avia@inst@tc@ballwidth}{0.25}					% Halbbreite Kugel
+\pgfmathsetmacro{\avia@inst@tc@ballheight}{0.30}				% Halbhöhe Kugel
+\pgfmathsetmacro{\avia@inst@tc@balldist}{0.5 * (\avia@inst@tc@slipinrad + \avia@inst@tc@slipoutrad)}
+
+
+% Hintergrund
+\newcommand{\aviainst@tc@face}
+{
+  \path [/avia/inst/tc/face/background] (0, 0) circle (\avia@inst@hole@rad);
+
+  \node [/avia/inst/tc/face/text,font={\fontsize{10}{10}\selectfont}]
+    at (0.0, -0.7) {TURN COORDINATOR};
+  \node [/avia/inst/tc/face/text,font={\fontsize{14}{14}\selectfont}]
+    at (0.0, -2.2) {2 MIN.};
+}
+
+\pgfkeys{/avia/inst/tc/face/background/.style={fill=black!80}}
+\pgfkeys{/avia/inst/tc/face/text/.style={text=white}}
+
+
+% Warn-Flag
+\newif\ifavia@inst@tc@flag
+
+\newcommand{\aviainst@tc@flag}
+{
+  \ifavia@inst@tc@flag
+    \path [/avia/inst/tc/flag/on]
+      (1.6, 0.3) rectangle (2.0, 0.7);
+  \else
+    \path [/avia/inst/tc/flag/off]
+      (1.6, 0.3) rectangle (2.0, 0.7);
+  \fi
+}
+
+\pgfkeys{/avia/inst/tc/flag/.is if=avia@inst@tc@flag}
+\pgfkeys{/avia/inst/tc/flag/off/.style={draw=black,top color=black!90,bottom color=black!90,middle color=black!60!white}}
+\pgfkeys{/avia/inst/tc/flag/on/.style={draw=black!80,top color=avia@inst@flagred,bottom color=avia@inst@flagred,middle color=avia@inst@flagred!60!white}}
+
+\pgfkeys{/avia/inst/tc/flag=false}
+
+
+% Skala
+\newcommand{\aviainst@tc@ring}
+{
+  \begingroup
+
+  \path [/avia/inst/tc/ring/background,even odd rule]
+    (0, 0) circle (\avia@inst@tc@ringoutrad)
+    (0, 0) circle (\avia@inst@tc@ringinrad);
+
+  \foreach \i in {-110,-90,90,110}
+  {
+    \begin{scope}[rotate=\i]
+    \path [/avia/inst/tc/ring/marker]
+      (-\avia@inst@tc@markerthick, \avia@inst@tc@markerinrad) rectangle
+      ( \avia@inst@tc@markerthick, \avia@inst@tc@markeroutrad);
+    \end{scope}
+  }
+
+  \begin{scope}[rotate=90]
+  \foreach \i in {-130,-100,100,130}
+  {
+    \path [/avia/inst/tc/ring/marker]
+      (\i:\avia@inst@tc@markerdist) circle (\avia@inst@tc@markerrad);
+  }
+
+  \node [/avia/inst/tc/ring/label]
+    at (-120:\avia@inst@tc@ringlabelrad) {R};
+
+  \node [/avia/inst/tc/ring/label]
+    at ( 120:\avia@inst@tc@ringlabelrad) {L};
+  \end{scope}
+
+  \node [/avia/inst/tc/ring/label,align=center,font={\fontsize{9}{9}\selectfont}]
+    at (0.0, -\avia@inst@tc@ringlabelrad) {NO PITCH\\INFORMATION};
+  \endgroup
+}
+
+\pgfkeys{/avia/inst/tc/ring/background/.style={fill=black!85,draw=black}}
+\pgfkeys{/avia/inst/tc/ring/marker/.style={fill=white}}
+\pgfkeys{/avia/inst/tc/ring/label/.style={text=white,font={\fontsize{14}{14}\selectfont\bfseries}}}
+
+
+% Kursmarker
+\newcommand{\aviainst@tc@slip}
+{
+  \begingroup
+  \pgfkeysgetvalue{/avia/inst/tc/slip}{\slip}
+  \pgfmathsetmacro{\angle}{min(max(-3.5 * \slip, -11.3), 11.3)}
+
+  \begin{scope}[shift={(0, \avia@inst@tc@slipshift)}]
+  \path [/avia/inst/tc/slip/background,rounded corners=5pt]
+    (\avia@inst@tc@sliplangle:\avia@inst@tc@slipinrad)
+    arc [start angle=\avia@inst@tc@sliplangle,end angle=\avia@inst@tc@sliprangle,radius=\avia@inst@tc@slipinrad] --
+    (\avia@inst@tc@sliprangle:\avia@inst@tc@slipoutrad)
+    arc [start angle=\avia@inst@tc@sliprangle,end angle=\avia@inst@tc@sliplangle,radius=\avia@inst@tc@slipoutrad] --
+    cycle;
+
+    \begin{scope}[rotate=\angle]
+    \path [/avia/inst/tc/slip/ball]
+      (0, -\avia@inst@tc@balldist) ellipse [x radius=\avia@inst@tc@ballwidth, y radius=\avia@inst@tc@ballheight];
+    \end{scope}
+
+  \clip
+    (\avia@inst@tc@sliplangle:\avia@inst@tc@slipinrad)
+    arc [start angle=\avia@inst@tc@sliplangle,end angle=\avia@inst@tc@sliprangle,radius=\avia@inst@tc@slipinrad] --
+    (\avia@inst@tc@sliprangle:\avia@inst@tc@slipoutrad)
+    arc [start angle=\avia@inst@tc@sliprangle,end angle=\avia@inst@tc@sliplangle,radius=\avia@inst@tc@slipoutrad] --
+    cycle;
+  \path [/avia/inst/tc/slip/marker]
+    (-\avia@inst@tc@slipdist, -\avia@inst@tc@slipinrad) -- (-\avia@inst@tc@slipdist, -\avia@inst@tc@slipoutrad)
+    ( \avia@inst@tc@slipdist, -\avia@inst@tc@slipinrad) -- ( \avia@inst@tc@slipdist, -\avia@inst@tc@slipoutrad);
+  \end{scope}
+  \endgroup
+}
+
+\pgfkeys{/avia/inst/tc/slip/background/.style={shade,shading=axis,top color=white!90!black,bottom color=white!50!black,draw=black!90,thick}}
+\pgfkeys{/avia/inst/tc/slip/ball/.style={shade,shading=ball,ball color=black!80}}
+\pgfkeys{/avia/inst/tc/slip/marker/.style={draw=black!90,line width=2pt}}
+
+
+% Flugzeugsymbol
+\newcommand{\aviainst@tc@needle}
+{
+  \path [/avia/inst/tc/needle/border]
+    (-\avia@inst@tc@needleoutrad,  0.03) --
+    (-\avia@inst@tc@needleoutrad, -0.03) --
+    (0.0, -0.07) --
+    ( \avia@inst@tc@needleoutrad, -0.03) --
+    ( \avia@inst@tc@needleoutrad,  0.03) --
+    (0.0,  0.07) --
+    cycle
+    (0.0,  0.15) circle (0.4)
+    (0.80, 0.37) rectangle (-0.80, 0.43)
+    (0.03, 0.40) rectangle (-0.03, 0.90);
+  \path [/avia/inst/tc/needle/symbol]
+    (-\avia@inst@tc@needleoutrad,  0.03) --
+    (-\avia@inst@tc@needleoutrad, -0.03) --
+    (0.0, -0.07) --
+    ( \avia@inst@tc@needleoutrad, -0.03) --
+    ( \avia@inst@tc@needleoutrad,  0.03) --
+    (0.0,  0.07) --
+    cycle
+    (0.0,  0.15) circle (0.4)
+    (0.80, 0.37) rectangle (-0.80, 0.43)
+    (0.03, 0.40) rectangle (-0.03, 0.90);
+}
+
+\pgfkeys{/avia/inst/tc/needle/border/.style={draw=black,thick}}
+\pgfkeys{/avia/inst/tc/needle/symbol/.style={fill=white}}
+
+
+% Instrument zeichnen.
+\newcommand{\aviainsttc}[1][]
+{
+  \begingroup
+
+  \pgfkeys{/avia/inst/tc/.cd,#1}
+
+  \pgfkeysgetvalue{/avia/inst/tc/stdrate}{\stdrate}
+  \pgfmathsetmacro{\angle}{min(max(-(\stdrate) * 20, -50), 50)}
+
+  \aviainst@frame
+  \aviainst@tc@face
+  \aviainst@tc@flag
+  \aviainst@tc@slip
+  \aviainst@tc@ring
+
+  \begin{scope}[rotate=\angle,transform shape]
+  \aviainst@tc@needle
+  \end{scope}
+
+  \aviainst@border@circle
+
+  \endgroup
+}
+
+
+% Einstellungen
+\pgfkeys{/avia/inst/tc/stdrate/.initial=0}
+\pgfkeys{/avia/inst/tc/stdrate/.value required}
+
+\pgfkeys{/avia/inst/tc/turn/.code={
+  \pgfmathsetmacro{\stdrate}{#1/ 3}
+  \pgfkeysalso{/avia/inst/tc/stdrate/.expanded=\stdrate}
+}}
+\pgfkeys{/avia/inst/tc/rate/.value required}
+
+\pgfkeys{/avia/inst/tc/slip/.initial=0}
+\pgfkeys{/avia/inst/tc/slip/.value required}
