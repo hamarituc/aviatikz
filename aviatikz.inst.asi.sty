@@ -1,0 +1,185 @@
+%
+% Fahrtmesser
+%
+
+\pgfmathsetmacro{\avia@inst@asi@majortickout}{\avia@inst@face@rad}		% Außenradius Skalenstrich
+\pgfmathsetmacro{\avia@inst@asi@majortickin}{\avia@inst@face@rad - 0.8}		% Innenradius Skalenstrich
+\pgfmathsetmacro{\avia@inst@asi@minortickout}{\avia@inst@face@rad}		% Außenradius Teilstrich
+\pgfmathsetmacro{\avia@inst@asi@minortickin}{\avia@inst@face@rad - 0.65}	% Innenradius Teilstrich
+\pgfmathsetmacro{\avia@inst@asi@numberrad}{\avia@inst@face@rad - 1.4}		% Radius Beschriftung
+\pgfmathsetmacro{\avia@inst@asi@band@white@orad}{\avia@inst@face@rad - 0.2}	% Außenradius weißer Balken
+\pgfmathsetmacro{\avia@inst@asi@band@white@irad}{\avia@inst@face@rad - 0.5}	% Innenradius weißer Balken
+\pgfmathsetmacro{\avia@inst@asi@band@green@orad}{\avia@inst@face@rad - 0.5}	% Außenradius grüner Balken
+\pgfmathsetmacro{\avia@inst@asi@band@green@irad}{\avia@inst@face@rad - 0.8}	% Innenradius grüner Balken
+\pgfmathsetmacro{\avia@inst@asi@band@yellow@orad}{\avia@inst@face@rad - 0.5}	% Außenradius gelber Balken
+\pgfmathsetmacro{\avia@inst@asi@band@yellow@irad}{\avia@inst@face@rad - 0.8}	% Innenradius gelber Balken
+\pgfmathsetmacro{\avia@inst@asi@band@red@orad}{\avia@inst@face@rad}		% Außenradius roter Balken
+\pgfmathsetmacro{\avia@inst@asi@band@red@irad}{\avia@inst@face@rad - 0.8}	% Innenradius roter Balken
+\pgfmathsetmacro{\avia@inst@asi@needlerad}{\avia@inst@face@rad - 0.5}		% Radius Anzeigenadel
+
+
+% Nichtlineare Anzeigefunktion
+\newcommand{\aviainst@asi@function}[1]
+{
+  \pgfmathsetmacro{\iasfrac}{(#1 - \iasmin) / (\iasmax - \iasmin)}
+  \pgfmathsetmacro{\anglefrac}{-0.4218 * \iasfrac ^ 2 + 1.4218 * \iasfrac}
+  \pgfmathsetmacro{\angle}{-min(max((\anglemax - \anglemin) * \anglefrac + \anglemin, 0), 350)}
+}
+
+
+\newcommand{\aviainst@asi@face}
+{
+  \begingroup
+
+  \aviainst@asi@function{\pgfkeysvalueof{/avia/inst/asi/speeds/vs0}}\edef\anglevszero{\angle}
+  \aviainst@asi@function{\pgfkeysvalueof{/avia/inst/asi/speeds/vs1}}\edef\anglevsone{\angle}
+  \aviainst@asi@function{\pgfkeysvalueof{/avia/inst/asi/speeds/vfe}}\edef\anglevfe{\angle}
+  \aviainst@asi@function{\pgfkeysvalueof{/avia/inst/asi/speeds/vno}}\edef\anglevno{\angle}
+  \aviainst@asi@function{\pgfkeysvalueof{/avia/inst/asi/speeds/vne}}\edef\anglevne{\angle}
+
+  \pgfmathtruncatemacro{\iasfirsttick}{ceil(\iasmin / 5) * 5}
+  \pgfmathtruncatemacro{\iassecondtick}{\iasfirsttick + 5}
+  \pgfmathtruncatemacro{\iaslasttick}{floor(\iasmax / 5) * 5}
+  \pgfmathtruncatemacro{\iasfirstnumber}{ceil(\iasmin / 20) * 20}
+  \pgfmathtruncatemacro{\iassecondnumber}{\iasfirstnumber + 20}
+  \pgfmathtruncatemacro{\iaslastnumber}{floor(\iasmax / 20) * 20}
+
+  % Ziffernblatt
+  \path [/avia/inst/asi/face/background] (0, 0) circle (\avia@inst@hole@rad);
+
+  \begin{scope}[rotate=90]
+
+  % Markierungsbögen
+  \path [/avia/inst/asi/face/band/white]
+    (\anglevszero:\avia@inst@asi@band@white@orad)
+    arc [start angle=\anglevszero,end angle=\anglevfe,radius=\avia@inst@asi@band@white@orad] --
+    (\anglevfe:\avia@inst@asi@band@white@irad)
+    arc [start angle=\anglevfe,end angle=\anglevszero,radius=\avia@inst@asi@band@white@irad] --
+    cycle;
+
+  \path [/avia/inst/asi/face/band/green]
+    (\anglevsone:\avia@inst@asi@band@green@orad)
+    arc [start angle=\anglevsone,end angle=\anglevno,radius=\avia@inst@asi@band@green@orad] --
+    (\anglevno:\avia@inst@asi@band@green@irad)
+    arc [start angle=\anglevno,end angle=\anglevsone,radius=\avia@inst@asi@band@green@irad] --
+    cycle;
+
+  \path [/avia/inst/asi/face/band/yellow]
+    (\anglevno:\avia@inst@asi@band@yellow@orad)
+    arc [start angle=\anglevno,end angle=\anglevne,radius=\avia@inst@asi@band@yellow@orad] --
+    (\anglevne:\avia@inst@asi@band@yellow@irad)
+    arc [start angle=\anglevne,end angle=\anglevno,radius=\avia@inst@asi@band@yellow@irad] --
+    cycle;
+
+  % Skalenstriche
+  \foreach \i in {\iasfirsttick,\iassecondtick,...,\iaslasttick}
+  {
+    \pgfmathtruncatemacro{\modulo}{mod(\i, 10)}
+
+    \aviainst@asi@function{\i}
+
+    \ifnum\modulo=0
+      \path [/avia/inst/asi/face/majortick]
+        (\angle:\avia@inst@asi@majortickin) -- (\angle:\avia@inst@asi@majortickout);
+    \else
+      \path [/avia/inst/asi/face/minortick]
+        (\angle:\avia@inst@asi@minortickin) -- (\angle:\avia@inst@asi@minortickout);
+    \fi
+  }
+
+  \path [/avia/inst/asi/face/band/red]
+    (\anglevne:\avia@inst@asi@band@red@orad) --
+    (\anglevne:\avia@inst@asi@band@red@irad);
+
+  % Beschriftung
+  \foreach \i in {\iasfirstnumber,\iassecondnumber,...,\iaslastnumber}
+  {
+    \aviainst@asi@function{\i}
+    \node [/avia/inst/asi/face/number] at (\angle:\avia@inst@asi@numberrad) {\i};
+  }
+
+  \end{scope}
+
+  % Weitere Textelemente
+  % TODO: Extra Style
+  \node [/avia/inst/asi/face/number] at (0.0,  0.4) [font={\fontsize{12}{12}\selectfont\bfseries},above] {AIRSPEED};
+  \node [/avia/inst/asi/face/number] at (0.0, -1.0) [font={\fontsize{10}{10}\selectfont\bfseries},below] {KNOTS};
+
+  \endgroup
+}
+
+\pgfkeys{/avia/inst/asi/face/background/.style={fill=black!80}}
+\pgfkeys{/avia/inst/asi/face/majortick/.style={draw=white,line width=2.5pt}}
+\pgfkeys{/avia/inst/asi/face/minortick/.style={draw=white,line width=1.5pt}}
+\pgfkeys{/avia/inst/asi/face/number/.style={text=white,font={\fontsize{16}{16}\selectfont}}}
+\pgfkeys{/avia/inst/asi/face/band/white/.style={fill=white}}
+\pgfkeys{/avia/inst/asi/face/band/green/.style={fill=avia@inst@bandgreen}}
+\pgfkeys{/avia/inst/asi/face/band/yellow/.style={fill=avia@inst@bandyellow}}
+\pgfkeys{/avia/inst/asi/face/band/red/.style={draw=avia@inst@bandred,line width=3.0pt}}
+
+\pgfkeys{/avia/inst/asi/face/vmin/.initial=40}
+\pgfkeys{/avia/inst/asi/face/vmax/.initial=200}
+\pgfkeys{/avia/inst/asi/face/amin/.initial=30}
+\pgfkeys{/avia/inst/asi/face/amax/.initial=320}
+
+
+% Zeiger
+\newcommand{\aviainst@asi@needle}
+{
+  \path [/avia/inst/asi/needle/border]
+    ( 0.00, \avia@inst@asi@needlerad) --
+    ( 0.24, -0.60) -- ( 0.00, -0.84) -- (-0.24, -0.60) --
+    cycle;
+
+  \path [/avia/inst/asi/needle/secondary]
+    (-0.20,  0.00) -- ( 0.00, -0.20) -- ( 0.20,  0.00) --
+    ( 0.24, -0.60) -- ( 0.00, -0.84) -- (-0.24, -0.60) --
+    cycle;
+
+  \path [/avia/inst/asi/needle/primary]
+    ( 0.00, \avia@inst@asi@needlerad) --
+    ( 0.20,  0.00) -- ( 0.00, -0.20) -- (-0.20,  0.00) --
+    cycle;
+}
+
+\pgfkeys{/avia/inst/asi/needle/primary/.style=/avia/inst/needle/primary}
+\pgfkeys{/avia/inst/asi/needle/secondary/.style=/avia/inst/needle/secondary}
+\pgfkeys{/avia/inst/asi/needle/border/.style=/avia/inst/needle/border}
+
+
+% Instrument zeichnen.
+\newcommand{\aviainstasi}[1][]
+{
+  \begingroup
+
+  \pgfkeys{/avia/inst/asi/.cd,#1}
+
+  \pgfkeysgetvalue{/avia/inst/asi/ias}{\ias}
+  \pgfkeysgetvalue{/avia/inst/asi/face/vmin}{\iasmin}
+  \pgfkeysgetvalue{/avia/inst/asi/face/vmax}{\iasmax}
+  \pgfkeysgetvalue{/avia/inst/asi/face/amin}{\anglemin}
+  \pgfkeysgetvalue{/avia/inst/asi/face/amax}{\anglemax}
+  \aviainst@asi@function{\ias}
+
+  \aviainst@frame
+  \aviainst@asi@face
+
+  \begin{scope}[rotate=\angle,transform shape]
+  \aviainst@asi@needle
+  \end{scope}
+
+  \aviainst@border@circle
+
+  \endgroup
+}
+
+
+% Einstellungen
+\pgfkeys{/avia/inst/asi/ias/.initial=0}
+
+% Standardwerte C172
+\pgfkeys{/avia/inst/asi/speeds/vs0/.initial=41}
+\pgfkeys{/avia/inst/asi/speeds/vs1/.initial=47}
+\pgfkeys{/avia/inst/asi/speeds/vfe/.initial=85}
+\pgfkeys{/avia/inst/asi/speeds/vno/.initial=128}
+\pgfkeys{/avia/inst/asi/speeds/vne/.initial=160}
