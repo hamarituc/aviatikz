@@ -117,8 +117,8 @@
 
   % Weitere Textelemente
   % TODO: Extra Style
-  \node [/avia/inst/asi/face/number] at (0.0,  0.4) [font={\fontsize{12}{12}\selectfont\bfseries},above] {AIRSPEED};
-  \node [/avia/inst/asi/face/number] at (0.0, -1.0) [font={\fontsize{10}{10}\selectfont\bfseries},below] {KNOTS};
+  \node [/avia/inst/asi/face/number] at (0.0,  0.4) [font={\pgfkeys{/avia/inst/font}\fontsize{12}{12}\selectfont\bfseries},above] {AIRSPEED};
+  \node [/avia/inst/asi/face/number] at (0.0, -1.0) [font={\pgfkeys{/avia/inst/font}\fontsize{10}{10}\selectfont\bfseries},below] {KNOTS};
 
   \endgroup
 }
@@ -126,7 +126,7 @@
 \pgfkeys{/avia/inst/asi/face/background/.style={fill=black!80}}
 \pgfkeys{/avia/inst/asi/face/majortick/.style={draw=white,line width=2.5pt}}
 \pgfkeys{/avia/inst/asi/face/minortick/.style={draw=white,line width=1.5pt}}
-\pgfkeys{/avia/inst/asi/face/number/.style={text=white,font={\fontsize{16}{16}\selectfont}}}
+\pgfkeys{/avia/inst/asi/face/number/.style={text=white,font={\pgfkeys{/avia/inst/font}\fontsize{16}{16}\selectfont}}}
 \pgfkeys{/avia/inst/asi/face/band/white/.style={fill=white}}
 \pgfkeys{/avia/inst/asi/face/band/green/.style={fill=avia@inst@bandgreen}}
 \pgfkeys{/avia/inst/asi/face/band/yellow/.style={fill=avia@inst@bandyellow}}

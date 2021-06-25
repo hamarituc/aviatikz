@@ -42,9 +42,9 @@
 {
   \path [/avia/inst/tc/face/background] (0, 0) circle (\avia@inst@hole@rad);
 
-  \node [/avia/inst/tc/face/text,font={\fontsize{10}{10}\selectfont}]
+  \node [/avia/inst/tc/face/text,font={\pgfkeys{/avia/inst/font}\fontsize{10}{10}\selectfont}]
     at (0.0, -0.7) {TURN COORDINATOR};
-  \node [/avia/inst/tc/face/text,font={\fontsize{14}{14}\selectfont}]
+  \node [/avia/inst/tc/face/text,font={\pgfkeys{/avia/inst/font}\fontsize{14}{14}\selectfont}]
     at (0.0, -2.2) {2 MIN.};
 }
 
@@ -105,14 +105,14 @@
     at ( 120:\avia@inst@tc@ringlabelrad) {L};
   \end{scope}
 
-  \node [/avia/inst/tc/ring/label,align=center,font={\fontsize{9}{9}\selectfont}]
+  \node [/avia/inst/tc/ring/label,align=center,font={\pgfkeys{/avia/inst/font}\fontsize{9}{9}\selectfont}]
     at (0.0, -\avia@inst@tc@ringlabelrad) {NO PITCH\\INFORMATION};
   \endgroup
 }
 
 \pgfkeys{/avia/inst/tc/ring/background/.style={fill=black!85,draw=black}}
 \pgfkeys{/avia/inst/tc/ring/marker/.style={fill=white}}
-\pgfkeys{/avia/inst/tc/ring/label/.style={text=white,font={\fontsize{14}{14}\selectfont\bfseries}}}
+\pgfkeys{/avia/inst/tc/ring/label/.style={text=white,font={\pgfkeys{/avia/inst/font}\fontsize{14}{14}\selectfont\bfseries}}}
 
 
 % Kursmarker

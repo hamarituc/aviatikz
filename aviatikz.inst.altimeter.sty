@@ -75,8 +75,8 @@
 
   % Weitere Textelemente
   % TODO: Extra Style
-  \node [/avia/inst/altimeter/face/number] at (108:\avia@inst@altimeter@majortickin) [font={\fontsize{8}{8}\selectfont},below,rotate= 18] {100};
-  \node [/avia/inst/altimeter/face/number] at ( 72:\avia@inst@altimeter@majortickin) [font={\fontsize{8}{8}\selectfont},below,rotate=-18] {FEET};
+  \node [/avia/inst/altimeter/face/number] at (108:\avia@inst@altimeter@majortickin) [font={\pgfkeys{/avia/inst/font}\fontsize{8}{8}\selectfont},below,rotate= 18] {100};
+  \node [/avia/inst/altimeter/face/number] at ( 72:\avia@inst@altimeter@majortickin) [font={\pgfkeys{/avia/inst/font}\fontsize{8}{8}\selectfont},below,rotate=-18] {FEET};
 
   \endgroup
 }
@@ -86,7 +86,7 @@
 \pgfkeys{/avia/inst/altimeter/face/background/.style={fill=black!80}}
 \pgfkeys{/avia/inst/altimeter/face/majortick/.style={draw=white,line width=3.0pt}}
 \pgfkeys{/avia/inst/altimeter/face/minortick/.style={draw=white,line width=1.5pt}}
-\pgfkeys{/avia/inst/altimeter/face/number/.style={text=white,font={\fontsize{24}{24}\selectfont}}}
+\pgfkeys{/avia/inst/altimeter/face/number/.style={text=white,font={\pgfkeys{/avia/inst/font}\fontsize{24}{24}\selectfont}}}
 \pgfkeys{/avia/inst/altimeter/face/hatch/.style={pattern=north west lines,pattern color=white}}
 \pgfkeys{/avia/inst/altimeter/face/type/.is choice}
 \pgfkeys{/avia/inst/altimeter/face/type/.value required}
@@ -169,7 +169,7 @@
 \pgfkeys{/avia/inst/altimeter/colsman/majortick/.style={draw=white,line width=2.0pt}}
 \pgfkeys{/avia/inst/altimeter/colsman/minortick/.style={draw=white,line width=1.0pt}}
 \pgfkeys{/avia/inst/altimeter/colsman/standardtick/.style={/avia/inst/altimeter/colsman/majortick}}
-\pgfkeys{/avia/inst/altimeter/colsman/number/.style={text=white,font={\fontsize{8}{8}\selectfont}}}
+\pgfkeys{/avia/inst/altimeter/colsman/number/.style={text=white,font={\pgfkeys{/avia/inst/font}\fontsize{8}{8}\selectfont}}}
 
 
 % Zehtausender-Zeiger
