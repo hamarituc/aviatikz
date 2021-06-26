@@ -37,27 +37,33 @@ red mark   & $V_\mathrm{NE}$                     & Maximum speed for all operati
 \end{table}
 
 The airspeed indicator can be parameterized by a variety of arguments. Default
-values are set up for a Cessna~172N aircraft. The configurable speed parameters
-are shown in table~\ref{tab:inst:asi:speeds}.
+values are set up for a Cessna~172N aircraft. The configurable speed and
+indicating range parameters are shown in table~\ref{tab:inst:asi:config}.
 
 \begin{table}
 \centering
-\begin{tabular}{ccl}
+\begin{tabular}{cl}
 \toprule
-Keyword             & V-Speed          & Remarks                              \\
+Keyword             & Remarks                                                   \\
 \midrule
-\texttt{speeds/vs0} & $V_\mathrm{S_0}$ & Stall speed in landing configuration \\
-\texttt{speeds/vs1} & $V_\mathrm{S_1}$ & Stall speed in any configuration     \\
-\texttt{speeds/vfe} & $V_\mathrm{FE}$  & Maximum speed with flaps extended    \\
-\texttt{speeds/vno} & $V_\mathrm{NO}$  & Maximum structural cruising speed    \\
-\texttt{speeds/vne} & $V_\mathrm{NE}$  & Never exceed speed                   \\
+\texttt{speeds/vs0} & $V_\mathrm{S_0}$ -- Stall speed in landing configuration  \\
+\texttt{speeds/vs1} & $V_\mathrm{S_1}$ -- Stall speed in any configuration      \\
+\texttt{speeds/vfe} & $V_\mathrm{FE}$  -- Maximum speed with flaps extended     \\
+\texttt{speeds/vno} & $V_\mathrm{NO}$  -- Maximum structural cruising speed     \\
+\texttt{speeds/vne} & $V_\mathrm{NE}$  -- Never exceed speed                    \\
+\texttt{face/vmin}  & Lowest speed value                                        \\
+\texttt{face/vmax}  & Highest speed value                                       \\
+\texttt{face/amin}  & Position angle of lower bound measured clockwise from top \\
+\texttt{face/amax}  & Position angle of upper bound measured clockwise from top \\
 \bottomrule
 \end{tabular}
-\caption{Airspeed indicator V-speeds}
-\label{tab:inst:asi:speeds}
+\caption{Airspeed indicator configuration parameters}
+\label{tab:inst:asi:config}
 \end{table}
 
 Figure~\ref{fig:inst:asi:c182t} shows the airspeed indicator of Cessna~182T.
+Figure~\ref{fig:inst:asi:range} shows the same airspeed indicator configuration
+as in figure~\ref{fig:inst:asi:c172n}, but with a changed face layout.
 
 \begin{figure}[!h]
 \centering
@@ -65,27 +71,6 @@ Figure~\ref{fig:inst:asi:c182t} shows the airspeed indicator of Cessna~182T.
 \caption{Air Speed Indicator for a Cessna~182T}
 \label{fig:inst:asi:c182t}
 \end{figure}
-
-To change the indicating range of the instrument you can use the parameters
-shown in table~\ref{tab:inst:asi:range}. Figure~\ref{fig:inst:asi:range} shows
-the same airspeed indicator configuration as in figure~\ref{fig:inst:asi:c172n}
-but with a changed face layout.
-
-\begin{table}
-\centering
-\begin{tabular}{cl}
-\toprule
-Keyword            & Remarks                                                   \\
-\midrule
-\texttt{face/vmin} & Lowest speed value                                        \\
-\texttt{face/vmax} & Highes spped value                                        \\
-\texttt{face/amin} & Position angle of lower bound measured clockwise from top \\
-\texttt{face/amax} & Position angle of upper bound measured clockwise from top \\
-\bottomrule
-\end{tabular}
-\caption{Airspeed indicator V-speeds}
-\label{tab:inst:asi:range}
-\end{table}
 
 \begin{figure}[!h]
 \centering
