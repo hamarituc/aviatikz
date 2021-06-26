@@ -16,12 +16,16 @@
 \usepackage{siunitx}
 \usepackage{listings}
 \usepackage{listingsutf8}
+\usepackage{booktabs}
+\usepackage{tabularx}
 
 \floatplacement{figure}{htb}
+\floatplacement{table}{htb}
 
 \DeclareSIUnit[number-unit-product={}]{\inch}{\text{\textquotedbl}}
 %\DeclareSIUnit[number-unit-product={\thinspace}]{\inch}{in}
 \DeclareSIUnit{\feet}{ft}
+\DeclareSIUnit{\KIAS}{KIAS}
 
 \sisetup{per-mode = symbol}
 
@@ -83,12 +87,8 @@ difference between total and static pressure is called dynamic pressure.
 \subsubsection{Variometer}
 \input{documentation/content/inst_vsi}
 
-
 \subsubsection{Airspeed Indicator}
-
-\begin{tikzpicture}
-\aviainstasi[ias=102]
-\end{tikzpicture}
+\input{documentation/content/inst_asi}
 
 \subsection{Gyroscopic Instruments}
 

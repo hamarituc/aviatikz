@@ -1,0 +1,95 @@
+The total pressure is affected by the airspeed of the aircraft while the static
+pressure is independent of the airspeed. This allows to measure the airspeed by
+comparing total to static pressure. Values shown on an airspeed indicator have
+to be corrected for several inflencing factors. These correntions lie beyond
+the scope of this commands. All speed values are considered as indicated values
+(IAS).
+
+The indicated airspeed is specified be the \texttt{ias} keyword argument.
+Figure~\ref{fig:inst:asi:c172n} shows \SI{102}{\KIAS}.
+
+\begin{figure}[!h]
+\centering
+\instfig[0.7]{0.4\linewidth}{0.55\linewidth}{documentation/figures/inst/asi_c172n}
+\caption{Air Speed Indicator}
+\label{fig:inst:asi:c172n}
+\end{figure}
+
+The airspeed indicator is an important performance instrument of the aircraft.
+Thus it carries several markings specific to the type of aircraft. These
+markings highlight different operating ranges depending on characteristic speed
+values shown in table~\ref{tab:inst:asi:markings}.
+
+\begin{table}
+\centering
+\begin{tabular}{ccl}
+\toprule
+Marking    & V-Speed                             & Remarks                                       \\
+\midrule
+white arc  & $V_\mathrm{S_0}$ -- $V_\mathrm{FE}$ & Flap operating range                          \\
+green arc  & $V_\mathrm{S_1}$ -- $V_\mathrm{NO}$ & Normal operating range                        \\
+yellow arc & $V_\mathrm{NO}$  -- $V_\mathrm{NE}$ & Operation with caution and only in smooth air \\
+red mark   & $V_\mathrm{NE}$                     & Maximum speed for all operations              \\
+\bottomrule
+\end{tabular}
+\caption{Airspeed indicator markings}
+\label{tab:inst:asi:markings}
+\end{table}
+
+The airspeed indicator can be parameterized by a variety of arguments. Default
+values are set up for a Cessna~172N aircraft. The configurable speed parameters
+are shown in table~\ref{tab:inst:asi:speeds}.
+
+\begin{table}
+\centering
+\begin{tabular}{ccl}
+\toprule
+Keyword             & V-Speed          & Remarks                              \\
+\midrule
+\texttt{speeds/vs0} & $V_\mathrm{S_0}$ & Stall speed in landing configuration \\
+\texttt{speeds/vs1} & $V_\mathrm{S_1}$ & Stall speed in any configuration     \\
+\texttt{speeds/vfe} & $V_\mathrm{FE}$  & Maximum speed with flaps extended    \\
+\texttt{speeds/vno} & $V_\mathrm{NO}$  & Maximum structural cruising speed    \\
+\texttt{speeds/vne} & $V_\mathrm{NE}$  & Never exceed speed                   \\
+\bottomrule
+\end{tabular}
+\caption{Airspeed indicator V-speeds}
+\label{tab:inst:asi:speeds}
+\end{table}
+
+Figure~\ref{fig:inst:asi:c182t} shows the airspeed indicator of Cessna~182T.
+
+\begin{figure}[!h]
+\centering
+\instfig[0.7]{0.4\linewidth}{0.55\linewidth}{documentation/figures/inst/asi_c182t}
+\caption{Air Speed Indicator for a Cessna~182T}
+\label{fig:inst:asi:c182t}
+\end{figure}
+
+To change the indicating range of the instrument you can use the parameters
+shown in table~\ref{tab:inst:asi:range}. Figure~\ref{fig:inst:asi:range} shows
+the same airspeed indicator configuration as in figure~\ref{fig:inst:asi:c172n}
+but with a changed face layout.
+
+\begin{table}
+\centering
+\begin{tabular}{cl}
+\toprule
+Keyword            & Remarks                                                   \\
+\midrule
+\texttt{face/vmin} & Lowest speed value                                        \\
+\texttt{face/vmax} & Highes spped value                                        \\
+\texttt{face/amin} & Position angle of lower bound measured clockwise from top \\
+\texttt{face/amax} & Position angle of upper bound measured clockwise from top \\
+\bottomrule
+\end{tabular}
+\caption{Airspeed indicator V-speeds}
+\label{tab:inst:asi:range}
+\end{table}
+
+\begin{figure}[!h]
+\centering
+\instfig[0.7]{0.4\linewidth}{0.55\linewidth}{documentation/figures/inst/asi_range}
+\caption{Air Speed Indicator with a changed face}
+\label{fig:inst:asi:range}
+\end{figure}
