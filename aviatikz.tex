@@ -5,6 +5,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{newpxtext}
 \usepackage{newpxmath}
+\usepackage{textcomp}
 \usepackage{parskip}
 \usepackage{a4wide}
 \usepackage{float}
@@ -21,6 +22,7 @@
 
 \floatplacement{figure}{htb}
 \floatplacement{table}{htb}
+
 
 \DeclareSIUnit[number-unit-product={}]{\inch}{\text{\textquotedbl}}
 %\DeclareSIUnit[number-unit-product={\thinspace}]{\inch}{in}
@@ -54,6 +56,8 @@
 \input{documentation/latex/inst_figure}
 
 
+\newcommand{\lara}[1]{\textnormal{\textlangle#1\textrangle}}
+
 
 \title{AviaTi\textit{k}Z}
 \author{Mario Haustein}
@@ -74,6 +78,7 @@ All drawing commands have to be placed inside a
 \section{Instruments}
 \input{documentation/content/inst_sample}
 
+\clearpage
 \subsection{Pitot-Static Instruments}
 
 The pitot-static system consists of two pressure probes. The static port
@@ -90,6 +95,7 @@ difference between total and static pressure is called dynamic pressure.
 \subsubsection{Airspeed Indicator}
 \input{documentation/content/inst_asi}
 
+\clearpage
 \subsection{Gyroscopic Instruments}
 
 Gyroscopic instruments using spinning masses driven either pneumatically by a
@@ -101,15 +107,7 @@ forces.
 \input{documentation/content/inst_hi}
 
 \subsubsection{Turn Coordinator}
-
-\begin{tikzpicture}
-\aviainsttc[turn=-3,slip=-1.5]
-\end{tikzpicture}
-
-\begin{tikzpicture}
-\aviainsttc[]
-\end{tikzpicture}
-
+\input{documentation/content/inst_tc}
 
 \subsubsection{Attitude Indicator}
 
@@ -118,7 +116,6 @@ forces.
 \end{tikzpicture}
 
 \clearpage
-
 \subsection{Radio Navigation}
 
 \subsubsection{Automatic Direction Finder}

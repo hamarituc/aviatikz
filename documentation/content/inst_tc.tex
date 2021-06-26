@@ -1,0 +1,47 @@
+The turn coordinator shows the turning rate around the yaw axis. Standard rate
+turns are performed with \SI{3}{\degree\per\second}. A full turn requires
+\SI{2}{\minute}. An aircraft turns with a standard rate if the aircraft symbol
+aligns with one of the lower bold marking lines. The small dots mark half and
+double rate turns.
+
+Turn rates can be specified in two different ways.
+
+\begin{itemize}
+\item \texttt{turn=\lara{rate}} specifies the turn rate in degrees per second.
+\item \texttt{stdrate=\lara{rate}} specifies the turn rate in multiples of standard rate turns.
+\end{itemize}
+
+Use positive values for right turns. The inclinometer is adjusted by the
+\texttt{slip} keyword argument. A positive value deflects the ball to the left.
+A value of one deflects the ball just as much as necessary to leave the center
+marker. Figure~\ref{fig:inst:tc:base} shows two examples.
+
+\begin{figure}[!h]
+\begin{subfigure}{\linewidth}
+\centering
+\instfig[0.7]{0.4\linewidth}{0.55\linewidth}{documentation/figures/inst/tc_straight_coord}
+\caption{straight and coordinated flight}
+\end{subfigure}
+
+\medskip
+
+\begin{subfigure}{\linewidth}
+\centering
+\instfig[0.7]{0.4\linewidth}{0.55\linewidth}{documentation/figures/inst/tc_stdleft_skid}
+\caption{skidding standard left turn}
+\end{subfigure}
+
+\caption{Turn coordinator}
+\label{fig:inst:tc:base}
+\end{figure}
+
+The warning flag of the turn coordinator is triggered on malfunctions to advise
+the pilot not to rely on the instrument readings. To trigger the warning set
+the \texttt{flag} keyword.
+
+\begin{figure}
+\centering
+\instfig[0.7]{0.4\linewidth}{0.55\linewidth}{documentation/figures/inst/tc_fail}
+\caption{Turn coordinator with triggered warning flag}
+\label{fig:inst:tc:flag}
+\end{figure}
