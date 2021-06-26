@@ -1,0 +1,10 @@
+\newcommand{\instfig}[4][1.0]
+{%
+  \begin{minipage}{#2}
+  \raggedleft\null\scalebox{#1}{\input{#4}}
+  \end{minipage}%
+  \hfill%
+  \begin{minipage}{#3}
+  \lstinputlisting[style=block]{#4}
+  \end{minipage}%
+}

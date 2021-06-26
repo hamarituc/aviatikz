@@ -1,0 +1,31 @@
+Inside an aircraft a variety of instruments is used for navigation and
+monitoring of the performance of a wide range of subsystems. The layout of
+these instruments is internationally standardised. A quick and clear reading
+of these instruments is essential for a safe and precise condution of flights.
+High quality instrument drawings facilitate a successful lerning process.
+
+The instruments are scaled in such a way to match the size of real instruments
+(\SI[quotient-mode=fraction,fraction-function=\sfrac]{1/8}[3]{\inch},
+\SI[quotient-mode=fraction,fraction-function=\sfrac]{1/4}[2]{\inch}, or
+\SI[quotient-mode=fraction,fraction-function=\sfrac]{1/4}[1]{\inch} diameter
+cutouts). Don't use PGFs coordinate transformations to rescale instruments as
+it won't scale font size or line width for example. Instead you have to use
+commands like \lstinline+\scalebox+ of the \texttt{graphicx} package.
+
+\begin{figure}[!h]
+\begin{subfigure}{\linewidth}
+\centering
+\instfig{0.55\linewidth}{0.4\linewidth}{documentation/figures/inst/sample_unscaled}
+\caption{Unscaled Instrument}
+\end{subfigure}
+
+\bigskip
+
+\begin{subfigure}{\linewidth}
+\centering
+\instfig{0.55\linewidth}{0.4\linewidth}{documentation/figures/inst/sample_scaled}
+\caption{Scaled instrument}
+\end{subfigure}
+
+\caption{Drawing instruments}
+\end{figure}

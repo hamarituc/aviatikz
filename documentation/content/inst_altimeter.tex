@@ -1,0 +1,28 @@
+Altimeters solely rely on the static pressure. Static pressure decreases the
+higher the aircraft flies. The barometric pressure at ground is affected by the
+current weather situation, so it isn't possible to relate pressure values
+directly to altitude levels. To read the altitude above mean sea level the
+altimeter has to be set up to the QNH reference value provided by ground
+stations. The QNH is measured in hectopascal (\si{\hecto\Pa}).
+
+The indicated altitude can be specified via the \texttt{altitude} keyword
+argument (ref. figure~\ref{fig:inst:altimeter:basic}).
+
+\begin{figure}[!h]
+\centering
+\instfig[0.65]{0.4\linewidth}{0.55\linewidth}{documentation/figures/inst/altimeter_basic}
+\caption{Altimeter}
+\label{fig:inst:altimeter:basic}
+\end{figure}
+
+The QNH can be set by the \texttt{qnh} keyword argument (ref.
+figure~\ref{fig:inst:altimeter:qnh}). The QNH settings doesn't influence the
+indicated altitude. If you want to demonstrate the effect of chaning the QNH
+you have to perform the necessary calculations on your own.
+
+\begin{figure}[!h]
+\centering
+\instfig[0.65]{0.4\linewidth}{0.55\linewidth}{documentation/figures/inst/altimeter_qnh}
+\caption{QNH-setting of an altimeter}
+\label{fig:inst:altimeter:qnh}
+\end{figure}

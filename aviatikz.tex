@@ -1,4 +1,4 @@
-\documentclass[a4paper]{article}
+\documentclass[11pt,a4paper]{article}
 
 
 \usepackage[T1]{fontenc}
@@ -7,8 +7,44 @@
 \usepackage{newpxmath}
 \usepackage{parskip}
 \usepackage{a4wide}
+\usepackage{float}
+\usepackage{subcaption}
 \usepackage{tikz}
 \usepackage{aviatikz}
+\usepackage{xfrac}
+\usepackage{amsmath}
+\usepackage{siunitx}
+\usepackage{listings}
+\usepackage{listingsutf8}
+
+\floatplacement{figure}{htb}
+
+\DeclareSIUnit[number-unit-product={}]{\inch}{\text{\textquotedbl}}
+%\DeclareSIUnit[number-unit-product={\thinspace}]{\inch}{in}
+
+\lstset{
+  language=[LaTeX]{TeX},
+  basicstyle=\ttfamily,
+  keywordstyle=\fontfamily{lmss}\bfseries,
+  tabsize=2,
+  inputencoding=utf8/latin1,
+  floatplacement=htb}
+
+\lstdefinestyle{block}{
+  basicstyle=\ttfamily,
+  breaklines,
+  breakindent=10pt}
+
+\lstdefinestyle{numberedblock}{
+  style=block,
+  numbers=left,
+  numberstyle=\scriptsize,
+  xleftmargin=20pt,
+  frame=leftline}
+
+
+\input{documentation/latex/inst_figure}
+
 
 
 \title{AviaTi\textit{k}Z}
@@ -22,18 +58,23 @@
 
 \section{Introduction}
 
+This package provides a set of commands to draw graphics related for
+theoretical flight training courses. It is base in the \texttt{tikz} package.
+All drawing commands have to be placed inside a
+\texttt{tikzpicture}~environment.
 
 \section{Instruments}
+\input{documentation/content/inst_sample}
 
-\subsection{Pressure Based Instruments}
+\subsection{Pitot-Static Instruments}
+
+The pitot-static system consists of two pressure probes. The static port
+measures the barometric pressure of the air around the aircraft. The pitot tube
+measures the total pressure of the airflow in the direction of flight. The
+difference between total and static pressure is called dynamic pressure.
 
 \subsubsection{Altimeter}
-
-\begin{tikzpicture}
-%\aviainstaltimeter[altitude=1200]
-\aviainstaltimeter[altitude=675]
-%\aviainstaltimeter[altitude=10675]
-\end{tikzpicture}
+\input{documentation/content/inst_altimeter}
 
 \subsubsection{Variometer}
 
