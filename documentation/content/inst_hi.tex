@@ -1,0 +1,31 @@
+The heading indicator show the direction into which the longitudinal axis of
+the aircraft points. It is usually manually synchronized to the reading of a
+magnetic compass.
+
+The heading is specified via the \texttt{hdg} keyword argument. Some heading
+indicators integrate an adjustable a heading bug. This heading bug acts as a
+source for an autopilot. The heading bug must be activated via the
+\texttt{hashdgbug=true} option and can be adjusted by the \texttt{hdgbug}
+keyword argument. Figure~\ref{fig:inst:hi:base} shows both types of heading
+indicators.
+
+\begin{figure}[!h]
+\begin{subfigure}{\linewidth}
+\centering
+\instfig[0.7]{0.4\linewidth}{0.55\linewidth}{documentation/figures/inst/hi_nobug}
+\caption{without heading bug}
+\label{fig:inst:hi:base_nobug}
+\end{subfigure}
+
+\medskip
+
+\begin{subfigure}{\linewidth}
+\centering
+\instfig[0.7]{0.4\linewidth}{0.55\linewidth}{documentation/figures/inst/hi_bug}
+\caption{with heading bug}
+\label{fig:inst:hi:base_bug}
+\end{subfigure}
+
+\caption{Heading indicator}
+\label{fig:inst:hi:base}
+\end{figure}
