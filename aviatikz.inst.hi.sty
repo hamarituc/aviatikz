@@ -1,0 +1,238 @@
+%
+% aviatikz.inst.hi.sty
+% Copyright (C) 2020 Mario Haustein
+%
+% This work may be distributed and/or modified under the conditions of the
+% LaTeX Project Public License, either version 1.3 of this license or (at your
+% option) any later version. The latest version of this license is in the file
+%
+%   http://www.latex-project.org/lppl.txt
+%
+% This file is part of the "aviatikz bundle" (The Work in LPPL) and all files
+% in that bundle must be distributed together.
+%
+
+
+%
+% Gyrokompass
+%
+
+\pgfmathsetmacro{\avia@inst@hi@scale@outrad}{\avia@inst@face@rad}		% Außenradius Kursskala
+\pgfmathsetmacro{\avia@inst@hi@scale@mainrad}{\avia@inst@face@rad - 0.5}	% Innenadius Skalenstrich mit Bezeichner
+\pgfmathsetmacro{\avia@inst@hi@scale@majorrad}{\avia@inst@face@rad - 0.5}	% Innenradius Skalenstrich ohne Bezeichner
+\pgfmathsetmacro{\avia@inst@hi@scale@minorrad}{\avia@inst@face@rad - 0.3}	% Innenradius Teilstrich
+\pgfmathsetmacro{\avia@inst@hi@scale@numrad}{\avia@inst@face@rad - 0.9}		% Beschriftungsradius Kursskala
+\pgfmathsetmacro{\avia@inst@hi@markerinrad}{\avia@inst@face@rad - 0.25}		% Innenradius Kursmarker
+\pgfmathsetmacro{\avia@inst@hi@markerthick}{0.1}				% Halbbreite Kursmarker
+
+
+% Hintergrund
+\newcommand{\aviainst@hi@face}
+{
+  \path [/avia/inst/hi/scale/background] (0, 0) circle (\avia@inst@hole@rad);
+}
+
+
+% Kursskala
+\let\aviainst@hi@scale@label\aviainst@crs@letter
+
+\newcommand{\aviainst@hi@scale}
+{
+  \begingroup
+
+  \foreach \i in {0,3,...,33}
+  {
+    \pgfmathsetmacro{\angle}{-10 * \i + 90}
+    \pgfmathsetmacro{\anglelabel}{\angle - 90}
+    \node [/avia/inst/hi/scale/number] at
+      (\angle:\avia@inst@hi@scale@numrad) [rotate=\anglelabel] {\aviainst@hi@scale@label{\i}};
+  }
+
+  \foreach \i in {0,10,...,350}
+  {
+    \pgfmathsetmacro{\angle}{\i + 90}
+    \pgfmathtruncatemacro{\modulo}{mod(\i, 30)}
+    \ifnum\modulo=0
+      \path [/avia/inst/hi/scale/maintick]
+        (\angle:\avia@inst@hi@scale@outrad) -- (\angle:\avia@inst@hi@scale@mainrad);
+    \else
+      \path [/avia/inst/hi/scale/majortick]
+        (\angle:\avia@inst@hi@scale@outrad) -- (\angle:\avia@inst@hi@scale@majorrad);
+    \fi
+  }
+
+  \foreach \i in {5,15,...,355}
+  {
+    \pgfmathsetmacro{\angle}{\i + 90}
+    \path [/avia/inst/hi/scale/minortick]
+      (\angle:\avia@inst@hi@scale@outrad) -- (\angle:\avia@inst@hi@scale@minorrad);
+  }
+
+  \endgroup
+}
+
+\pgfkeys{/avia/inst/hi/scale/background/.style={fill=black!80}}
+\pgfkeys{/avia/inst/hi/scale/maintick/.style={draw=white,line width=2.0pt}}
+\pgfkeys{/avia/inst/hi/scale/majortick/.style={draw=white,line width=1.0pt}}
+\pgfkeys{/avia/inst/hi/scale/minortick/.style={draw=white,line width=1.0pt}}
+\pgfkeys{/avia/inst/hi/scale/number/.style={text=white,font={\pgfkeys{/avia/inst/font}\fontsize{16}{16}\selectfont}}}
+
+\pgfkeys{/avia/inst/hi/scale/style/.is choice}
+\pgfkeys{/avia/inst/hi/scale/style/.value required}
+\pgfkeys{/avia/inst/hi/scale/style/number/.code={\let\aviainst@hi@scale@label\aviainst@crs@number}}
+\pgfkeys{/avia/inst/hi/scale/style/letter/.code={\let\aviainst@hi@scale@label\aviainst@crs@letter}}
+\pgfkeys{/avia/inst/hi/scale/style=letter}
+
+
+% Kursmarker
+\newcommand{\aviainst@hi@marker}
+{
+  \begingroup
+  \foreach \i in {45,90,...,315}
+  {
+    \begin{scope}[rotate=\i]
+    \path [/avia/inst/hi/marker]
+      ( 0.0, \avia@inst@hi@markerinrad) --
+      (-\avia@inst@hi@markerthick, \avia@inst@face@rad) --
+      ( \avia@inst@hi@markerthick, \avia@inst@face@rad) --
+      cycle;
+    \end{scope}
+  }
+  \endgroup
+}
+
+\pgfkeys{/avia/inst/hi/marker/.style={fill=avia@inst@markerorange,draw=avia@inst@markerorange!40!black,thin}}
+
+
+% Flugzeugsymbol
+\newcommand{\aviainst@hi@acft}
+{
+  \path [/avia/inst/hi/acft/symbol]
+    ( 0.0,  2.2)
+    .. controls +(-0.1, -0.2) and +( 0.0,  0.5) ..
+    (-0.3,  0.8) -- (-1.6, -0.1)
+    .. controls +(-0.1, -0.1) and +( 0.0,  0.1) ..
+    (-1.7, -0.5) -- (-0.3,  0.0) -- (-0.2, -1.1) -- (-0.6, -1.5)
+    .. controls +(-0.1, -0.1) and +( 0.0,  0.1) ..
+    (-0.7, -1.8) -- (-0.1, -1.5) --
+    ( 0.0, -1.7) --
+    ( 0.1, -1.5) -- ( 0.7, -1.8)
+    .. controls +( 0.0,  0.1) and +( 0.1, -0.1) ..
+    ( 0.6, -1.5) -- ( 0.2, -1.1) -- ( 0.3,  0.0) -- ( 1.7, -0.5)
+    .. controls +( 0.0,  0.1) and +( 0.1, -0.1) ..
+    ( 1.6, -0.1) -- ( 0.3,  0.8)
+    .. controls +( 0.0,  0.5) and +( 0.1, -0.2) ..
+    cycle
+    ( 0.0,  2.2) -- ( 0.0, \avia@inst@hi@scale@minorrad);
+}
+
+\pgfkeys{/avia/inst/hi/acft/border/.style={draw=black,line cap=rect,line width=2.5pt}}
+\pgfkeys{/avia/inst/hi/acft/symbol/.style={draw=avia@inst@markerorange,line cap=rect,line width=1.5pt}}
+
+
+% Gyro-Knopf
+\newcommand{\aviainst@hi@hiknob}
+{
+  \begingroup
+  \aviainst@knob
+  \pgfmathsetmacro{\ring}{\avia@inst@knob@ring - 0.15}
+
+  \node [/avia/inst/hi/knob/hi/label] at (0, 0) {PUSH};
+  \path [/avia/inst/hi/knob/hi/arrow,draw=white,Latex-]
+    (150:\ring) -- (135:\ring);
+  \path [/avia/inst/hi/knob/hi/arrow,draw=white]
+    (135:\ring) arc [start angle=135,end angle=45,radius=\ring] ( 45:\ring);
+  \path [/avia/inst/hi/knob/hi/arrow,draw=white,-Latex]
+    ( 45:\ring) -- ( 30:\ring);
+  \endgroup
+}
+
+\pgfkeys{/avia/inst/hi/knob/hi/label/.style={text=white,font={\pgfkeys{/avia/inst/font}\fontsize{10}{10}\selectfont\bfseries}}}
+\pgfkeys{/avia/inst/hi/knob/hi/arrow/.style={draw=white}}
+
+
+% Kurswahl
+\newcommand{\aviainst@hi@hdgbug}
+{
+  \begin{scope}[shift={(0, \avia@inst@face@rad)}]
+  \path [/avia/inst/hi/hdgbug/style]
+    (-0.03,  0.00) -- (-0.03, -0.30) -- (-0.10, -0.30) -- (-0.20, -0.15) -- (-0.20,  0.0) -- cycle;
+  \path [/avia/inst/hi/hdgbug/style]
+    ( 0.03,  0.00) -- ( 0.03, -0.30) -- ( 0.10, -0.30) -- ( 0.20, -0.15) -- ( 0.20,  0.0) -- cycle;
+  \end{scope}
+}
+
+\newif\ifavia@inst@hi@hashdgbug
+\pgfkeys{/avia/inst/hi/hashdgbug/.is if=avia@inst@hi@hashdgbug}
+\pgfkeys{/avia/inst/hi/hashdgbug=false}
+
+\pgfkeys{/avia/inst/hi/hdgbug/style/.style={fill=avia@inst@markerorange,draw=avia@inst@markerorange!40!black,thin}}
+
+
+% HDG-Knopf
+\newcommand{\aviainst@hi@hdgknob}
+{
+  \begingroup
+  \aviainst@knob
+  \node [/avia/inst/hi/knob/hdg] at (0, 0) {HDG};
+  \endgroup
+}
+
+\pgfkeys{/avia/inst/hi/knob/hdg/.style={text=avia@inst@markerorange,font={\pgfkeys{/avia/inst/font}\fontsize{12}{12}\selectfont\bfseries}}}
+
+
+% Instrument zeichnen.
+\newcommand{\aviainsthi}[1][]
+{
+  \begingroup
+
+  \pgfkeys{/avia/inst/hi/.cd,#1}
+
+  \pgfkeysgetvalue{/avia/inst/hi/hdg}{\hdg}
+  \pgfkeysgetvalue{/avia/inst/hi/hdgbug}{\hdgbug}
+  \pgfmathsetmacro{\hdgbug}{-\hdgbug}
+
+  \aviainst@frame
+  \aviainst@hi@face
+
+  \begin{scope}[rotate=\hdg,transform shape]
+  \aviainst@hi@scale
+    \ifavia@inst@hi@hashdgbug
+    \begin{scope}[rotate=\hdgbug,transform shape]
+    \aviainst@hi@hdgbug
+    \end{scope}
+    \fi
+  \end{scope}
+
+  \aviainst@hi@marker
+  \aviainst@hi@acft
+
+  \aviainst@border@circle
+
+  % Gyro-Knopf
+  \begingroup
+  \pgfmathsetmacro{\knobcoord}{\avia@inst@mount@dist / sqrt(2)}
+  \begin{scope}[shift={(-\knobcoord,-\knobcoord)},transform shape]
+  \aviainst@hi@hiknob
+  \end{scope}
+  \endgroup
+
+  \ifavia@inst@hi@hashdgbug
+  \begingroup
+  \pgfmathsetmacro{\knobcoord}{\avia@inst@mount@dist / sqrt(2)}
+  \begin{scope}[shift={(\knobcoord,-\knobcoord)},rotate=\hdgbug,transform shape]
+  \aviainst@hi@hdgknob
+  \end{scope}
+  \endgroup
+  \fi
+
+  \endgroup
+}
+
+
+% Einstellungen
+\pgfkeys{/avia/inst/hi/hdg/.initial=0}
+\pgfkeys{/avia/inst/hi/hdg/.value required}
+
+\pgfkeys{/avia/inst/hi/hdgbug/.initial=0}
+\pgfkeys{/avia/inst/hi/hdgbug/.value required}
