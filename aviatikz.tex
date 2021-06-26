@@ -21,6 +21,10 @@
 
 \DeclareSIUnit[number-unit-product={}]{\inch}{\text{\textquotedbl}}
 %\DeclareSIUnit[number-unit-product={\thinspace}]{\inch}{in}
+\DeclareSIUnit{\feet}{ft}
+
+\sisetup{per-mode = symbol}
+
 
 \lstset{
   language=[LaTeX]{TeX},
@@ -77,10 +81,8 @@ difference between total and static pressure is called dynamic pressure.
 \input{documentation/content/inst_altimeter}
 
 \subsubsection{Variometer}
+\input{documentation/content/inst_vsi}
 
-\begin{tikzpicture}
-\aviainstvsi[vspeed=-565]
-\end{tikzpicture}
 
 \subsubsection{Airspeed Indicator}
 
