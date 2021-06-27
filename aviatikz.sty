@@ -53,7 +53,8 @@
 \pgfmathsetmacro{\avia@inst@knob@rad}{0.7}			% Radius Einstellknopf
 \pgfmathsetmacro{\avia@inst@knob@ring}{0.62}			% Ringradius auf dem Einstellknopf
 
-\pgfkeys{/avia/inst/font/.code={\univrscondensed}}
+% PGF baut hier in der Expansion irgendwo ein Leerzeichen ein
+\pgfkeys{/avia/inst/font/.code={\univrscondensed\negthinspace}}
 
 \pgfkeys{/avia/inst/needle/primary/.style={fill=white}}
 \pgfkeys{/avia/inst/needle/secondary/.style={fill=black!70}}
