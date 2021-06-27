@@ -1,0 +1,255 @@
+%
+% aviatikz.inst.ai.sty
+% Copyright (C) 2021 Mario Haustein
+%
+% This work may be distributed and/or modified under the conditions of the
+% LaTeX Project Public License, either version 1.3 of this license or (at your
+% option) any later version. The latest version of this license is in the file
+%
+%   http://www.latex-project.org/lppl.txt
+%
+% This file is part of the "aviatikz bundle" (The Work in LPPL) and all files
+% in that bundle must be distributed together.
+%
+
+
+%
+% Künstlicher Horizont
+%
+
+\pgfmathsetmacro{\avia@inst@ai@bankoutrad}{\avia@inst@face@rad}				% Außenradius Querlageskala
+\pgfmathsetmacro{\avia@inst@ai@bankinrad}{\avia@inst@face@rad - 0.9}			% Innenradius Querlageskala
+\pgfmathsetmacro{\avia@inst@ai@banktick@zerowidth}{0.2}					% Halbbreite QL-Nullstrich
+\pgfmathsetmacro{\avia@inst@ai@banktick@majorrad}{\avia@inst@ai@bankoutrad + 0.1}	% Außenradius QL-Skalenstrich
+\pgfmathsetmacro{\avia@inst@ai@banktick@minorrad}{\avia@inst@ai@bankoutrad - 0.4}	% Außenradius QL-Teilstrich
+\pgfmathsetmacro{\avia@inst@ai@banktick@inrad}{\avia@inst@ai@bankinrad - 0.1}		% Innenradius QL-Skalenstrich
+\pgfmathsetmacro{\avia@inst@ai@bankmarker@width}{0.1}					% Halbbreite QL-Zeiger
+\pgfmathsetmacro{\avia@inst@ai@bankmarker@height}{0.3}					% Höhe QL-Zeiger
+\pgfmathsetmacro{\avia@inst@ai@bankmarker@off}{0.0}					% Versatz QL-Zeiger
+\pgfmathsetmacro{\avia@inst@ai@pitchmarker@ipos}{2}					% Außenkante Tragfläche
+\pgfmathsetmacro{\avia@inst@ai@pitchmarker@opos}{0.8}					% Innenkante Tragfläche
+\pgfmathsetmacro{\avia@inst@ai@pitchmarker@height}{0.03}				% Halbhöhe Tragfläche
+\pgfmathsetmacro{\avia@inst@ai@pitchmarker@rad}{0.08}					% Radius Nase
+\pgfmathsetmacro{\avia@inst@ai@pitchscale@width}{\avia@inst@ai@bankinrad + 0.2}		% Halbbreite Anstellwinkelanzeige
+\pgfmathsetmacro{\avia@inst@ai@pitchscale@height}{0.5 * \avia@inst@ai@bankoutrad}	% Halbhöhe Anstellwinkelanzeige
+\pgfmathsetmacro{\avia@inst@ai@pitchscale@scale}{0.05}					% Abstand der Winkelmarkierung
+
+
+% Hintergrund
+\newcommand{\aviainst@ai@face}
+{
+  \path [/avia/inst/ai/face/sky]   (0:\avia@inst@ai@bankinrad) arc (0: 180:\avia@inst@ai@bankinrad) -- cycle;
+  \path [/avia/inst/ai/face/earth] (0:\avia@inst@ai@bankinrad) arc (0:-180:\avia@inst@ai@bankinrad) -- cycle;
+}
+
+\pgfkeys{/avia/inst/ai/face/sky/.style={fill=avia@inst@skyblue!80!black}}
+\pgfkeys{/avia/inst/ai/face/earth/.style={fill=avia@inst@earthbrown!80!black}}
+
+
+% Skala (Anstellwinkel)
+\newcommand{\aviainst@ai@pitchscale}
+{
+  \begingroup
+
+  \begin{scope}
+  \clip (0:\avia@inst@ai@bankoutrad) arc (0:180:\avia@inst@ai@bankoutrad) -- cycle;
+  \path [/avia/inst/ai/pitch/sky]
+    (-\avia@inst@ai@pitchscale@width, 0)  .. controls +( 0,  1) and +(-2,  0) ..
+    (0,  \avia@inst@ai@pitchscale@height) .. controls +( 2,  0) and +( 0,  1) ..
+    ( \avia@inst@ai@pitchscale@width, 0)  .. controls +( 0, -1) and +( 2,  0) ..
+    (0, -\avia@inst@ai@pitchscale@height) .. controls +(-2,  0) and +( 0, -1) ..
+    cycle;
+  \end{scope}
+
+  \begin{scope}
+  \clip (0:\avia@inst@ai@bankoutrad) arc (0:-180:\avia@inst@ai@bankoutrad) -- cycle;
+  \path [/avia/inst/ai/pitch/earth]
+    (-\avia@inst@ai@pitchscale@width, 0)  .. controls +( 0,  1) and +(-2,  0) ..
+    (0,  \avia@inst@ai@pitchscale@height) .. controls +( 2,  0) and +( 0,  1) ..
+    ( \avia@inst@ai@pitchscale@width, 0)  .. controls +( 0, -1) and +( 2,  0) ..
+    (0, -\avia@inst@ai@pitchscale@height) .. controls +(-2,  0) and +( 0, -1) ..
+    cycle;
+  \end{scope}
+
+  \path [/avia/inst/ai/pitch/horizon]
+    (-\avia@inst@ai@pitchscale@width, 0) --
+    ( \avia@inst@ai@pitchscale@width, 0);
+
+  \foreach \i in {10,20}
+  {
+    \path [/avia/inst/ai/pitch/skytick]
+      (-\i*\avia@inst@ai@pitchscale@scale,  \i*\avia@inst@ai@pitchscale@scale) --
+      ( \i*\avia@inst@ai@pitchscale@scale,  \i*\avia@inst@ai@pitchscale@scale);
+    \path [/avia/inst/ai/pitch/earthtick]
+      (-\i*\avia@inst@ai@pitchscale@scale, -\i*\avia@inst@ai@pitchscale@scale) --
+      ( \i*\avia@inst@ai@pitchscale@scale, -\i*\avia@inst@ai@pitchscale@scale);
+
+    \node [/avia/inst/ai/pitch/skytext,left]
+      at (-\i*\avia@inst@ai@pitchscale@scale,  \i*\avia@inst@ai@pitchscale@scale)
+      {\i};
+    \node [/avia/inst/ai/pitch/skytext,right]
+      at ( \i*\avia@inst@ai@pitchscale@scale,  \i*\avia@inst@ai@pitchscale@scale)
+      {\i};
+    \node [/avia/inst/ai/pitch/earthtext,left]
+      at (-\i*\avia@inst@ai@pitchscale@scale, -\i*\avia@inst@ai@pitchscale@scale)
+      {\i};
+    \node [/avia/inst/ai/pitch/earthtext,right]
+      at ( \i*\avia@inst@ai@pitchscale@scale, -\i*\avia@inst@ai@pitchscale@scale)
+      {\i};
+  }
+
+  \foreach \i in {5,15,25}
+  {
+    \path [/avia/inst/ai/pitch/skytick]
+      (-5*\avia@inst@ai@pitchscale@scale,  \i*\avia@inst@ai@pitchscale@scale) --
+      ( 5*\avia@inst@ai@pitchscale@scale,  \i*\avia@inst@ai@pitchscale@scale);
+    \path [/avia/inst/ai/pitch/earthtick]
+      (-5*\avia@inst@ai@pitchscale@scale, -\i*\avia@inst@ai@pitchscale@scale) --
+      ( 5*\avia@inst@ai@pitchscale@scale, -\i*\avia@inst@ai@pitchscale@scale);
+  }
+
+  \endgroup
+}
+
+\pgfkeys{/avia/inst/ai/pitch/sky/.style={
+  draw=avia@inst@skyblue!50!black,
+  shading=radial,
+  inner color=avia@inst@skyblue!70!white,
+  outer color=avia@inst@skyblue!90!black}}
+\pgfkeys{/avia/inst/ai/pitch/earth/.style={
+  draw=avia@inst@earthbrown!50!black,
+  shading=radial,
+  inner color=avia@inst@earthbrown!70!white,
+  outer color=avia@inst@earthbrown!90!black}}
+\pgfkeys{/avia/inst/ai/pitch/skytick/.style={draw=white,thick}}
+\pgfkeys{/avia/inst/ai/pitch/earthtick/.style={draw=white,thick}}
+\pgfkeys{/avia/inst/ai/pitch/skytext/.style={text=white,font={\pgfkeys{/avia/inst/font}\fontsize{10}{10}\selectfont}}}
+\pgfkeys{/avia/inst/ai/pitch/earthtext/.style={text=white,font={\pgfkeys{/avia/inst/font}\fontsize{10}{10}\selectfont}}}
+\pgfkeys{/avia/inst/ai/pitch/horizon/.style={draw=white,line width=1.0pt}}
+
+
+% Skala (Querneigung)
+\newcommand{\aviainst@ai@bankring}
+{
+  \begingroup
+
+  \begin{pgfscope}
+  \pgfseteorule\clip
+    (0, 0) circle (\avia@inst@ai@bankoutrad)
+    (0, 0) circle (\avia@inst@ai@bankinrad);
+
+  \path [/avia/inst/ai/bank/sky]
+    (  0:\avia@inst@ai@bankoutrad) arc (0:180:\avia@inst@ai@bankoutrad) --
+    (180:\avia@inst@ai@bankinrad)  arc (180:0:\avia@inst@ai@bankinrad)  --
+    cycle;
+  \path [/avia/inst/ai/bank/earth]
+    (   0:\avia@inst@ai@bankoutrad) arc (0:-180:\avia@inst@ai@bankoutrad) --
+    (-180:\avia@inst@ai@bankinrad)  arc (-180:0:\avia@inst@ai@bankinrad)  --
+    cycle;
+
+  \foreach \i in {70,80,100,110}
+  {
+    \path [/avia/inst/ai/bank/minortick] (\i:\avia@inst@ai@banktick@inrad) -- (\i:\avia@inst@ai@banktick@minorrad);
+  }
+
+  \foreach \i in {0,30,60,120,150,180}
+  {
+    \path [/avia/inst/ai/bank/majortick] (\i:\avia@inst@ai@banktick@inrad) -- (\i:\avia@inst@ai@banktick@majorrad);
+  }
+
+  \path [/avia/inst/ai/bank/zerotick]
+    (0, \avia@inst@ai@bankinrad) --
+    (-\avia@inst@ai@banktick@zerowidth, \avia@inst@ai@bankoutrad) --
+    ( \avia@inst@ai@banktick@zerowidth, \avia@inst@ai@bankoutrad) --
+    cycle;
+  \end{pgfscope}
+
+  \path [/avia/inst/ai/bank/border,even odd rule,fill=none]
+    (0, 0) circle (\avia@inst@ai@bankoutrad)
+    (0, 0) circle (\avia@inst@ai@bankinrad);
+
+  \endgroup
+}
+
+% Index (Querneigung)
+\newcommand{\aviainst@ai@bankmarker}
+{
+  \begin{scope}[shift={(0, \avia@inst@ai@bankinrad)},shift={(0, \avia@inst@ai@bankmarker@off)}]
+  \path [/avia/inst/ai/bank/marker]
+    (0, 0) --
+    (-\avia@inst@ai@bankmarker@width, -\avia@inst@ai@bankmarker@height) --
+    ( \avia@inst@ai@bankmarker@width, -\avia@inst@ai@bankmarker@height) --
+    cycle;
+  \end{scope}
+}
+
+\pgfkeys{/avia/inst/ai/bank/sky/.style={fill=avia@inst@skyblue}}
+\pgfkeys{/avia/inst/ai/bank/earth/.style={fill=avia@inst@earthbrown}}
+\pgfkeys{/avia/inst/ai/bank/border/.style={draw=black}}
+\pgfkeys{/avia/inst/ai/bank/zerotick/.style={fill=white,draw=white,thin}}
+\pgfkeys{/avia/inst/ai/bank/majortick/.style={draw=white,line width=3.0pt}}
+\pgfkeys{/avia/inst/ai/bank/minortick/.style={draw=white,line width=1.5pt}}
+\pgfkeys{/avia/inst/ai/bank/marker/.style={fill=avia@inst@markerlumorange,draw=avia@inst@markerlumorange,thick}}
+
+
+% Index (Anstellwinkel)
+\newcommand{\aviainst@ai@pitchmarker}
+{
+  \path [/avia/inst/ai/pitch/marker]
+    ( \avia@inst@ai@pitchmarker@ipos, -\avia@inst@ai@pitchmarker@height) rectangle
+    ( \avia@inst@ai@pitchmarker@opos,  \avia@inst@ai@pitchmarker@height);
+  \path [/avia/inst/ai/pitch/marker]
+    (-\avia@inst@ai@pitchmarker@ipos, -\avia@inst@ai@pitchmarker@height) rectangle
+    (-\avia@inst@ai@pitchmarker@opos,  \avia@inst@ai@pitchmarker@height);
+  \path [/avia/inst/ai/pitch/marker]
+    (0, 0) circle (\avia@inst@ai@pitchmarker@rad);
+}
+
+\pgfkeys{/avia/inst/ai/pitch/marker/.style={fill=avia@inst@markerlumorange,draw=avia@inst@markerlumorange,thin}}
+
+
+% Instrument zeichnen.
+\newcommand{\aviainstai}[1][]
+{
+  \begingroup
+
+  \pgfkeys{/avia/inst/ai/.cd,#1}
+
+  \pgfkeysgetvalue{/avia/inst/ai/pitch}{\pitchangle}
+  \pgfkeysgetvalue{/avia/inst/ai/bank}{\bankangle}
+  \pgfkeysgetvalue{/avia/inst/ai/pitchref}{\pitchrefangle}
+  \pgfmathsetmacro{\pitchshift}{-\avia@inst@ai@pitchscale@scale * min(max(\pitchangle, -25), 25)}
+  \pgfmathsetmacro{\pitchrefshift}{\avia@inst@ai@pitchscale@scale * min(max(\pitchrefangle, -25), 25)}
+
+  \aviainst@frame
+
+  \begin{scope}[rotate=\bankangle]
+  \aviainst@ai@face
+    \begin{scope}[shift={(0, \pitchshift)}]
+    \aviainst@ai@pitchscale
+    \end{scope}
+  \aviainst@ai@bankring
+  \end{scope}
+
+  \aviainst@ai@bankmarker
+
+  \begin{scope}[shift={(0, \pitchrefshift)}]
+  \aviainst@ai@pitchmarker
+  \end{scope}
+
+  \aviainst@border@flatbottom
+
+  \begingroup
+  \begin{scope}[shift={(0, -3.15)},scale=0.65,transform shape]
+  \aviainst@knob
+  \end{scope}
+  \endgroup
+
+  \endgroup
+}
+
+
+% Einstellungen
+\pgfkeys{/avia/inst/ai/pitch/.initial=0}
+\pgfkeys{/avia/inst/ai/bank/.initial=0}
+\pgfkeys{/avia/inst/ai/pitchref/.initial=0}
