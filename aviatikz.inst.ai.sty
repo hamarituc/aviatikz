@@ -51,6 +51,8 @@
 {
   \begingroup
 
+  \pgfkeysgetvalue{/avia/inst/ai/bank}{\bankangle}
+
   \begin{scope}
   \clip (0:\avia@inst@ai@bankoutrad) arc (0:180:\avia@inst@ai@bankoutrad) -- cycle;
   \path [/avia/inst/ai/pitch/sky]
@@ -84,16 +86,16 @@
       (-\i*\avia@inst@ai@pitchscale@scale, -\i*\avia@inst@ai@pitchscale@scale) --
       ( \i*\avia@inst@ai@pitchscale@scale, -\i*\avia@inst@ai@pitchscale@scale);
 
-    \node [/avia/inst/ai/pitch/skytext,left]
+    \node [/avia/inst/ai/pitch/skytext,left,rotate=\bankangle]
       at (-\i*\avia@inst@ai@pitchscale@scale,  \i*\avia@inst@ai@pitchscale@scale)
       {\i};
-    \node [/avia/inst/ai/pitch/skytext,right]
+    \node [/avia/inst/ai/pitch/skytext,right,rotate=\bankangle]
       at ( \i*\avia@inst@ai@pitchscale@scale,  \i*\avia@inst@ai@pitchscale@scale)
       {\i};
-    \node [/avia/inst/ai/pitch/earthtext,left]
+    \node [/avia/inst/ai/pitch/earthtext,left,rotate=\bankangle]
       at (-\i*\avia@inst@ai@pitchscale@scale, -\i*\avia@inst@ai@pitchscale@scale)
       {\i};
-    \node [/avia/inst/ai/pitch/earthtext,right]
+    \node [/avia/inst/ai/pitch/earthtext,right,rotate=\bankangle]
       at ( \i*\avia@inst@ai@pitchscale@scale, -\i*\avia@inst@ai@pitchscale@scale)
       {\i};
   }
@@ -224,6 +226,7 @@
   \aviainst@frame
 
   \begin{scope}[rotate=\bankangle]
+  \clip (0, 0) circle (\avia@inst@ai@bankoutrad);
   \aviainst@ai@face
     \begin{scope}[shift={(0, \pitchshift)}]
     \aviainst@ai@pitchscale
