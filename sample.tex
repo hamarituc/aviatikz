@@ -10,6 +10,7 @@
 %\usepackage[landscape]{geometry}
 \usepackage{tikz}
 \usepackage{aviatikz}
+\usepackage{graphicx}
 
 
 
@@ -36,44 +37,20 @@
 
 \begin{document}
 
+\section{Standard Six Pack}
 
+\scalebox{0.6}{%
+\begin{tikzpicture}
+\node at (-9,  0) {\tikz{\aviainstasi[ias=87]}};
+\node at ( 0,  0) {\tikz{\aviainstai[bank=30,pitch=8]}};
+\node at ( 9,  0) {\tikz{\aviainstaltimeter[altitude=1842]}};
+\node at (-9, -9) {\tikz{\aviainsttc[turn=6]}};
+\node at ( 0, -9) {\tikz{\aviainsthi[hdg=317,hashdgbug=true,hdgbug=245]}};
+\node at ( 9, -9) {\tikz{\aviainstvsi[vspeed=565]}};
+\end{tikzpicture}}
 
-\begin{tikzpicture}
-\aviainstai[]
-\end{tikzpicture}
-%
-\begin{tikzpicture}
-\aviainstai[pitch=10]
-\end{tikzpicture}
-%
-\begin{tikzpicture}
-\aviainstai[bank=30,pitchref=5]
-\end{tikzpicture}
-%
-\begin{tikzpicture}
-\aviainstai[bank=-20,pitch=-15]
-\end{tikzpicture}
-%
-\begin{tikzpicture}
-\aviainstasi[ias=102]
-\end{tikzpicture}
-%
-\begin{tikzpicture}
-\aviainsttc[turn=-3,slip=-1.5]
-\end{tikzpicture}
-%
-\begin{tikzpicture}
-\aviainsttc[]
-\end{tikzpicture}
-%
-\begin{tikzpicture}
-\aviainsthi[hdg=125,hashdgbug=true,hdgbug=95]
-\end{tikzpicture}
-%
-\begin{tikzpicture}
-\aviainsthi[hdg=115]
-\end{tikzpicture}
-%
+\newpage
+
 \begin{tikzpicture}
 \aviainstadf[type=rbi,rb=90]
 \end{tikzpicture}
@@ -96,15 +73,5 @@
 %
 \begin{tikzpicture}
 \aviainstcdi[obs=215,type=vor,vor/radial=200]
-\end{tikzpicture}
-%
-\begin{tikzpicture}
-\aviainstvsi[vspeed=-565]
-\end{tikzpicture}
-%
-\begin{tikzpicture}
-%\aviainstaltimeter[altitude=1200]
-\aviainstaltimeter[altitude=675]
-%\aviainstaltimeter[altitude=10675]
 \end{tikzpicture}
 \end{document}
