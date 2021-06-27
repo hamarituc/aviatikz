@@ -4,10 +4,10 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[ngerman]{babel}
-%\usepackage{lmodern}
+\usepackage{lmodern}
 \usepackage{parskip}
-\usepackage{a4wide}
-%\usepackage[landscape]{geometry}
+%\usepackage{a4wide}
+\usepackage[landscape,left=2cm,right=2cm,top=2cm,bottom=2cm,includeheadfoot]{geometry}
 \usepackage{tikz}
 \usepackage{aviatikz}
 \usepackage{graphicx}
@@ -29,17 +29,16 @@
 %https://tug.org/FontCatalogue/universalisadfcondensed/
 %https://tug.org/FontCatalogue/qtvagaround/
 
-
-
-
 % Schrift: Futura
+
 
 
 \begin{document}
 
 \section{Standard Six Pack}
 
-\scalebox{0.6}{%
+\begin{center}
+\scalebox{0.75}{%
 \begin{tikzpicture}
 \node at (-9,  0) {\tikz{\aviainstasi[ias=87]}};
 \node at ( 0,  0) {\tikz{\aviainstai[bank=30,pitch=8]}};
@@ -48,30 +47,18 @@
 \node at ( 0, -9) {\tikz{\aviainsthi[hdg=317,hashdgbug=true,hdgbug=245]}};
 \node at ( 9, -9) {\tikz{\aviainstvsi[vspeed=565]}};
 \end{tikzpicture}}
+\end{center}
 
 \newpage
 
+\section{Radio Navigation}
+
+\begin{center}
+\scalebox{0.75}{%
 \begin{tikzpicture}
-\aviainstadf[type=rbi,rb=90]
-\end{tikzpicture}
-%
-\begin{tikzpicture}
-\aviainstadf[type=mdi,brng hdg={30}{55}]
-\end{tikzpicture}
-%
-\begin{tikzpicture}
-\aviainstadf[type=mdi,hdg=45,rb=60]
-\end{tikzpicture}
-%
-\begin{tikzpicture}
-\aviainstcdi[obs=30,ils/dev={0.2}{0.2}]
-\end{tikzpicture}
-%
-\begin{tikzpicture}
-\aviainstcdi[obs=215,vor/radial=30]
-\end{tikzpicture}
-%
-\begin{tikzpicture}
-\aviainstcdi[obs=215,type=vor,vor/radial=200]
-\end{tikzpicture}
+\node at (-9,  0) {\tikz{\aviainstcdi[obs=30,ils/dev={0.2}{0.2}]}};
+\node at ( 0,  0) {\tikz{\aviainstcdi[obs=215,type=vor,vor/radial=222]}};
+\node at ( 9,  0) {\tikz{\aviainstadf[type=mdi,brng hdg={30}{55}]}};
+\end{tikzpicture}}
+\end{center}
 \end{document}
